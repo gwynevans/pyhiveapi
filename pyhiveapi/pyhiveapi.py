@@ -2,6 +2,7 @@ import operator
 from datetime import datetime
 from datetime import timedelta
 import requests
+from enum import Enum
 
 HIVE_NODE_UPDATE_INTERVAL_DEFAULT = 120
 HIVE_WEATHER_UPDATE_INTERVAL_DEFAULT = 60  #### Update to 900 or 600
@@ -12,144 +13,149 @@ NODE_ATTRIBS = {"Header": "HeaderText"}
 
 class HiveDevices:
     """Initiate Hive Devices Class."""
-
-    hub = []
-    thermostat = []
-    boiler_module = []
-    plug = []
-    light = []
-    sensors = []
+    def __init__(self) -> None:
+        super().__init__()
+        self.hub = []
+        self.thermostat = []
+        self.boiler_module = []
+        self.plug = []
+        self.light = []
+        self.sensors = []
 
 
 class HiveProducts:
     """Initiate Hive Products Class."""
-
-    heating = []
-    hotwater = []
-    light = []
-    plug = []
-    sensors = []
+    def __init__(self) -> None:
+        super().__init__()
+        self.heating = []
+        self.hotwater = []
+        self.light = []
+        self.plug = []
+        self.sensors = []
 
 
 class HivePlatformData:
     """Initiate Hive PlatformData Class."""
-
-    minmax = {}
+    def __init__(self) -> None:
+        super().__init__()
+        self.minmax = {}
 
 
 class HiveTemperature:
     """Initiate Hive Temperature Class."""
-
-    unit = ""
-    value = 0.00
+    def __init__(self) -> None:
+        super().__init__()
+        self.unit = ""
+        self.value = 0.00
 
 
 class HiveWeather:
     """Initiate Hive Weather Class."""
-
-    last_update = datetime(2017, 1, 1, 12, 0, 0)
-    nodeid = ""
-    icon = ""
-    description = ""
-    temperature = HiveTemperature()
+    def __init__(self) -> None:
+        super().__init__()
+        self.last_update = datetime(2017, 1, 1, 12, 0, 0)
+        self.nodeid = ""
+        self.icon = ""
+        self.description = ""
+        self.temperature = HiveTemperature()
 
 
 class HiveSession:
     """Initiate Hive Session Class."""
 
-    session_id = ""
-    session_logon_datetime = datetime(2017, 1, 1, 12, 0, 0)
-    username = ""
-    password = ""
-    postcode = ""
-    timezone = ""
-    countrycode = ""
-    locale = ""
-    temperature_unit = ""
-    devices = HiveDevices()
-    products = HiveProducts()
-    weather = HiveWeather()
-    data = HivePlatformData()
-#    holiday_mode = Hive_HolidayMode()
-    update_node_interval_seconds = HIVE_NODE_UPDATE_INTERVAL_DEFAULT
-    update_weather_interval_seconds = HIVE_WEATHER_UPDATE_INTERVAL_DEFAULT
-    last_update = datetime(2017, 1, 1, 12, 0, 0)
-    logging = False
+    def __init__(self) -> None:
+        super().__init__()
+        self.session_id = ""
+        self.session_logon_datetime = datetime(2017, 1, 1, 12, 0, 0)
+        self.username = ""
+        self.password = ""
+        self.postcode = ""
+        self.timezone = ""
+        self.countrycode = ""
+        self.locale = ""
+        self.temperature_unit = ""
+        self.devices = HiveDevices()
+        self.products = HiveProducts()
+        self.weather = HiveWeather()
+        self.data = HivePlatformData()
+        #    self.holiday_mode = Hive_HolidayMode()
+        self.update_node_interval_seconds = HIVE_NODE_UPDATE_INTERVAL_DEFAULT
+        self.update_weather_interval_seconds = HIVE_WEATHER_UPDATE_INTERVAL_DEFAULT
+        self.last_update = datetime(2017, 1, 1, 12, 0, 0)
+        self.logging = False
 
 
 class HiveAPIURLS:
     """Initiate Hive API URLS Class."""
-
-    global_login = ""
-    base = ""
-    weather = ""
-    holiday_mode = ""
-    devices = ""
-    products = ""
-    nodes = ""
+    def __init__(self) -> None:
+        super().__init__()
+        self.global_login = ""
+        self.base = ""
+        self.weather = ""
+        self.holiday_mode = ""
+        self.devices = ""
+        self.products = ""
+        self.nodes = ""
 
 
 class HiveAPIHeaders:
     """Initiate Hive API Headers Class."""
-
-    accept_key = ""
-    accept_value = ""
-    content_type_key = ""
-    content_type_value = ""
-    session_id_key = ""
-    session_id_value = ""
+    def __init__(self) -> None:
+        super().__init__()
+        self.accept_key = ""
+        self.accept_value = ""
+        self.content_type_key = ""
+        self.content_type_value = ""
+        self.session_id_key = ""
+        self.session_id_value = ""
 
 
 class HiveAPIDetails:
     """Initiate Hive API Details Class."""
-
-    urls = HiveAPIURLS()
-    headers = HiveAPIHeaders()
-    platform_name = ""
-
-
-HIVE_API = HiveAPIDetails()
-HSC = HiveSession()
+    def __init__(self) -> None:
+        super().__init__()
+        self.urls = HiveAPIURLS()
+        self.headers = HiveAPIHeaders()
+        self.platform_name = ""
 
 
-class Pyhiveapi:
+class HiveAPI:
     def __init__(self):
+        self.details = HiveAPIDetails()
+        self.session = HiveSession()
+
         """Initialise the base variable values."""
 
-        HIVE_API.platform_name = ""
+        self.details.platform_name = ""
 
-        HIVE_API.urls.global_login = "https://beekeeper.hivehome.com/1.0/global/login"
-        HIVE_API.urls.base = ""
-        HIVE_API.urls.weather = "https://weather-prod.bgchprod.info/weather"
-        HIVE_API.urls.holiday_mode = "/holiday-mode"
-        HIVE_API.urls.devices = "/devices"
-        HIVE_API.urls.products = "/products"
-        HIVE_API.urls.nodes = "/nodes"
+        self.details.urls.global_login = "https://beekeeper.hivehome.com/1.0/global/login"
+        self.details.urls.base = ""
+        self.details.urls.weather = "https://weather-prod.bgchprod.info/weather"
+        self.details.urls.holiday_mode = "/holiday-mode"
+        self.details.urls.devices = "/devices"
+        self.details.urls.products = "/products"
+        self.details.urls.nodes = "/nodes"
 
-        HIVE_API.headers.accept_key = "Accept"
-        HIVE_API.headers.accept_value = "*/*"
-        HIVE_API.headers.content_type_key = "content-type"
-        HIVE_API.headers.content_type_value = "application/json"
-        HIVE_API.headers.session_id_key = "authorization"
-        HIVE_API.headers.session_id_value = None
-
+        self.details.headers.accept_key = "Accept"
+        self.details.headers.accept_value = "*/*"
+        self.details.headers.content_type_key = "content-type"
+        self.details.headers.content_type_value = "application/json"
+        self.details.headers.session_id_key = "authorization"
+        self.details.headers.session_id_value = None
 
     def hive_api_json_call(self, request_type, request_url, json_string_content, absolute_request_url):
         """Call the JSON Hive API and return any returned data."""
-        api_headers = {HIVE_API.headers.content_type_key:
-                       HIVE_API.headers.content_type_value,
-                       HIVE_API.headers.accept_key:
-                       HIVE_API.headers.accept_value,
-                       HIVE_API.headers.session_id_key:
-                       HIVE_API.headers.session_id_value}
+        api_headers = {self.details.headers.content_type_key: self.details.headers.content_type_value,
+                       self.details.headers.accept_key: self.details.headers.accept_value,
+                       self.details.headers.session_id_key: self.details.headers.session_id_value}
 
         json_return = {}
-        full_request_url = ""
+        json_response = ""
 
         if absolute_request_url:
             full_request_url = request_url
         else:
-            full_request_url = HIVE_API.urls.base + request_url
+            full_request_url = self.details.urls.base + request_url
 
         json_call_try_finished = False
         try:
@@ -192,61 +198,57 @@ class Pyhiveapi:
 
         return json_return
 
-
     def hive_api_logon(self):
         """Log in to the Hive API and get the Session ID."""
         login_details_found = True
-        HSC.session_id = None
+        self.session.session_id = None
 
         try_finished = False
         try:
-            api_resp_d = {}
-            api_resp_p = None
+            json_string_content = '{"username": "' + self.session.username + '","password": "' + self.session.password + '"}'
 
-            json_string_content = '{"username": "' + HSC.username + '","password": "' + HSC.password + '"}'
-
-            api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST", HIVE_API.urls.global_login, json_string_content, True)
+            api_resp_d = self.hive_api_json_call("POST", self.details.urls.global_login, json_string_content, True)
             api_resp_p = api_resp_d['parsed']
 
             if ('token' in api_resp_p and
                     'user' in api_resp_p and
                     'platform' in api_resp_p):
-                HIVE_API.headers.session_id_value = api_resp_p["token"]
-                HSC.session_id = HIVE_API.headers.session_id_value
-                HSC.session_logon_datetime = datetime.now()
+                self.details.headers.session_id_value = api_resp_p["token"]
+                self.session.session_id = self.details.headers.session_id_value
+                self.session.session_logon_datetime = datetime.now()
 
                 if 'endpoint' in api_resp_p['platform']:
-                    HIVE_API.urls.base = api_resp_p['platform']['endpoint']
+                    self.details.urls.base = api_resp_p['platform']['endpoint']
                 else:
                     login_details_found = False
 
                 if 'name' in api_resp_p['platform']:
-                    HIVE_API.platform_name = api_resp_p['platform']['name']
+                    self.details.platform_name = api_resp_p['platform']['name']
                 else:
                     login_details_found = False
 
                 if 'locale' in api_resp_p['user']:
-                    HSC.locale = api_resp_p['user']['locale']
+                    self.session.locale = api_resp_p['user']['locale']
                 else:
                     login_details_found = False
 
                 if 'countryCode' in api_resp_p['user']:
-                    HSC.countrycode = api_resp_p['user']['countryCode']
+                    self.session.countrycode = api_resp_p['user']['countryCode']
                 else:
                     login_details_found = False
 
                 if 'timezone' in api_resp_p['user']:
-                    HSC.timezone = api_resp_p['user']['timezone']
+                    self.session.timezone = api_resp_p['user']['timezone']
                 else:
                     login_details_found = False
 
                 if 'postcode' in api_resp_p['user']:
-                    HSC.postcode = api_resp_p['user']['postcode']
+                    self.session.postcode = api_resp_p['user']['postcode']
                 else:
                     login_details_found = False
 
                 if 'temperatureUnit' in api_resp_p['user']:
-                    HSC.temperature_unit = api_resp_p['user']['temperatureUnit']
+                    self.session.temperature_unit = api_resp_p['user']['temperatureUnit']
                 else:
                     login_details_found = False
             else:
@@ -261,42 +263,38 @@ class Pyhiveapi:
                 login_details_found = False
 
         if not login_details_found:
-            HSC.session_id = None
-
+            self.session.session_id = None
 
     def check_hive_api_logon(self):
         """Check if currently logged in with a valid Session ID."""
         current_time = datetime.now()
-        l_logon_secs = (current_time - HSC.session_logon_datetime).total_seconds()
+        l_logon_secs = (current_time - self.session.session_logon_datetime).total_seconds()
         l_logon_mins = int(round(l_logon_secs / 60))
 
-        if l_logon_mins >= MINUTES_BETWEEN_LOGONS or HSC.session_id is None:
-            Pyhiveapi.hive_api_logon(self)
-
+        if l_logon_mins >= MINUTES_BETWEEN_LOGONS or self.session.session_id is None:
+            self.hive_api_logon()
 
     def update_data(self, node_id):
         """Get latest data for Hive nodes - rate limiting."""
         nodes_updated = False
         current_time = datetime.now()
-        last_update_secs = (current_time - HSC.last_update).total_seconds()
-        if last_update_secs >= HSC.update_node_interval_seconds:
-            HSC.last_update = current_time
-            nodes_updated = Pyhiveapi.hive_api_get_nodes(self, node_id)
+        last_update_secs = (current_time - self.session.last_update).total_seconds()
+        if last_update_secs >= self.session.update_node_interval_seconds:
+            self.session.last_update = current_time
+            nodes_updated = self.hive_api_get_nodes(node_id)
         return nodes_updated
-
 
     def hive_api_get_nodes_nl(self):
         """Get latest data for Hive nodes - not rate limiting."""
-        Pyhiveapi.hive_api_get_nodes(self, "NoID")
-
+        self.hive_api_get_nodes("NoID")
 
     def hive_api_get_nodes(self, node_id):
         """Get latest data for Hive nodes."""
         get_nodes_successful = True
 
-        Pyhiveapi.check_hive_api_logon(self)
+        self.check_hive_api_logon()
 
-        if HSC.session_id is not None:
+        if self.session.session_id is not None:
             tmp_devices_hub = []
             tmp_devices_thermostat = []
             tmp_devices_boiler_module = []
@@ -312,9 +310,7 @@ class Pyhiveapi:
 
             try_finished = False
             try:
-                api_resp_d = {}
-                api_resp_p = None
-                api_resp_d = Pyhiveapi.hive_api_json_call(self, "GET", HIVE_API.urls.devices, "", False)
+                api_resp_d = self.hive_api_json_call("GET", self.details.urls.devices, "", False)
 
                 api_resp_p = api_resp_d['parsed']
 
@@ -345,9 +341,7 @@ class Pyhiveapi:
 
             try_finished = False
             try:
-                api_resp_d = {}
-                api_resp_p = None
-                api_resp_d = Pyhiveapi.hive_api_json_call(self, "GET", HIVE_API.urls.products, "", False)
+                api_resp_d = self.hive_api_json_call("GET", self.details.urls.products, "", False)
 
                 api_resp_p = api_resp_d['parsed']
 
@@ -376,28 +370,28 @@ class Pyhiveapi:
             try_finished = False
             try:
                 if len(tmp_devices_hub) > 0:
-                    HSC.devices.hub = tmp_devices_hub
+                    self.session.devices.hub = tmp_devices_hub
                 if len(tmp_devices_thermostat) > 0:
-                    HSC.devices.thermostat = tmp_devices_thermostat
+                    self.session.devices.thermostat = tmp_devices_thermostat
                 if len(tmp_devices_boiler_module) > 0:
-                    HSC.devices.boiler_module = tmp_devices_boiler_module
+                    self.session.devices.boiler_module = tmp_devices_boiler_module
                 if len(tmp_devices_plug) > 0:
-                    HSC.devices.plug = tmp_devices_plug
+                    self.session.devices.plug = tmp_devices_plug
                 if len(tmp_devices_light) > 0:
-                    HSC.devices.light = tmp_devices_light
+                    self.session.devices.light = tmp_devices_light
                 if len(tmp_devices_sensors) > 0:
-                    HSC.devices.sensors = tmp_devices_sensors
+                    self.session.devices.sensors = tmp_devices_sensors
 
                 if len(tmp_products_heating) > 0:
-                    HSC.products.heating = tmp_products_heating
+                    self.session.products.heating = tmp_products_heating
                 if len(tmp_products_hotwater) > 0:
-                    HSC.products.hotwater = tmp_products_hotwater
+                    self.session.products.hotwater = tmp_products_hotwater
                 if len(tmp_products_plug) > 0:
-                    HSC.products.plug = tmp_products_plug
+                    self.session.products.plug = tmp_products_plug
                 if len(tmp_products_light) > 0:
-                    HSC.products.light = tmp_products_light
+                    self.session.products.light = tmp_products_light
                 if len(tmp_products_sensors) > 0:
-                    HSC.products.sensors = tmp_products_sensors
+                    self.session.products.sensors = tmp_products_sensors
 
                 try_finished = True
             except (IOError, RuntimeError, ZeroDivisionError):
@@ -410,42 +404,39 @@ class Pyhiveapi:
 
         return get_nodes_successful
 
-
     def hive_api_get_weather(self):
         """Get latest weather data from Hive."""
         get_weather_successful = True
 
         current_time = datetime.now()
-        last_update_secs = (current_time - HSC.weather.last_update).total_seconds()
-        if last_update_secs >= HSC.update_weather_interval_seconds:
-            Pyhiveapi.check_hive_api_logon(self)
+        last_update_secs = (current_time - self.session.weather.last_update).total_seconds()
+        if last_update_secs >= self.session.update_weather_interval_seconds:
+            self.check_hive_api_logon()
 
-            if HSC.session_id is not None:
+            if self.session.session_id is not None:
                 try_finished = False
                 try:
-                    api_resp_d = {}
-                    api_resp_p = None
-                    weather_url = HIVE_API.urls.weather + "?postcode=" + HSC.postcode + "&country=" + HSC.countrycode
+                    weather_url = self.details.urls.weather + "?postcode=" + self.session.postcode + "&country=" + self.session.countrycode
                     weather_url = weather_url.replace(" ", "%20")
 
-                    api_resp_d = Pyhiveapi.hive_api_json_call(self, "GET", weather_url, "", True)
+                    api_resp_d = self.hive_api_json_call("GET", weather_url, "", True)
                     api_resp_p = api_resp_d['parsed']
 
                     if "weather" in api_resp_p:
                         if "icon" in api_resp_p["weather"]:
-                            HSC.weather.icon = api_resp_p["weather"]["icon"]
+                            self.session.weather.icon = api_resp_p["weather"]["icon"]
                         if "description" in api_resp_p["weather"]:
-                            HSC.weather.description = api_resp_p["weather"]["icon"]
+                            self.session.weather.description = api_resp_p["weather"]["icon"]
                         if "temperature" in api_resp_p["weather"]:
                             if "unit" in api_resp_p["weather"]["temperature"]:
-                                HSC.weather.temperature.unit = api_resp_p["weather"]["temperature"]["unit"]
+                                self.session.weather.temperature.unit = api_resp_p["weather"]["temperature"]["unit"]
                             if "unit" in api_resp_p["weather"]["temperature"]:
-                                HSC.weather.temperature.value = api_resp_p["weather"]["temperature"]["value"]
-                        HSC.weather.nodeid = "HiveWeather"
+                                self.session.weather.temperature.value = api_resp_p["weather"]["temperature"]["value"]
+                        self.session.weather.nodeid = "HiveWeather"
                     else:
                         get_weather_successful = False
 
-                    HSC.weather.last_update = current_time
+                    self.session.weather.last_update = current_time
                     try_finished = True
                 except (IOError, RuntimeError, ZeroDivisionError):
                     try_finished = False
@@ -457,7 +448,6 @@ class Pyhiveapi:
 
         return get_weather_successful
 
-
     def p_minutes_to_time(self, minutes_to_convert):
         """Convert minutes string to datetime."""
         hours_converted, minutes_converted = divmod(minutes_to_convert, 60)
@@ -467,7 +457,6 @@ class Pyhiveapi:
                                            "%H:%M")
         converted_time_string = converted_time.strftime("%H:%M")
         return converted_time_string
-
 
     def p_get_schedule_now_next_later(self, hive_api_schedule):
         """Get the schedule now, next and later of a given nodes schedule."""
@@ -497,7 +486,7 @@ class Pyhiveapi:
                 current_slot_custom = current_day_schedule_sorted[current_slot]
 
                 slot_date = datetime.now() + timedelta(days=day_index)
-                slot_time = Pyhiveapi.p_minutes_to_time(self, current_slot_custom["start"])
+                slot_time = self.p_minutes_to_time(current_slot_custom["start"])
                 slot_time_date_s = (slot_date.strftime("%d-%m-%Y")
                                     + " "
                                     + slot_time)
@@ -530,26 +519,24 @@ class Pyhiveapi:
 
         return schedule_now_and_next
 
-
     def initialise_api(self, username, password, mins_between_updates):
         """Setup the Hive platform."""
-        HSC.username = username
-        HSC.password = password
+        self.session.username = username
+        self.session.password = password
 
         if mins_between_updates <= 0:
             mins_between_updates = 2
 
         hive_node_update_interval = mins_between_updates * 60
 
-        if HSC.username is None or HSC.password is None:
+        if self.session.username is None or self.session.password is None:
             return None
         else:
-            Pyhiveapi.hive_api_logon(self)
-            if HSC.session_id is not None:
-                HSC.update_node_interval_seconds = hive_node_update_interval
-                Pyhiveapi.hive_api_get_nodes_nl(self)
-#                Pyhiveapi.hive_api_get_weather(self)
-
+            self.hive_api_logon()
+            if self.session.session_id is not None:
+                self.session.update_node_interval_seconds = hive_node_update_interval
+                self.hive_api_get_nodes_nl()
+                #                HiveBase.hive_api_get_weather(self)
 
         device_list_all = {}
         device_list_sensor = []
@@ -558,76 +545,106 @@ class Pyhiveapi:
         device_list_light = []
         device_list_plug = []
 
-        if len(HSC.devices.hub) > 0:
-            for a_device in HSC.devices.hub:
+        if len(self.session.devices.hub) > 0:
+            for a_device in self.session.devices.hub:
                 if ("id" in a_device and "state" in a_device and "name" in a_device["state"]):
-                    device_list_sensor.append({'HA_DeviceType': 'Hub_OnlineStatus', 'Hive_NodeID': a_device["id"], 'Hive_NodeName': a_device["state"]["name"], "Hive_DeviceType": "Hub"})
+                    device_list_sensor.append({'HA_DeviceType': 'Hub_OnlineStatus', 'Hive_NodeID': a_device["id"],
+                                               'Hive_NodeName': a_device["state"]["name"], "Hive_DeviceType": "Hub"})
 
-
-        if len(HSC.products.heating) > 0:
-            for product in HSC.products.heating:
+        if len(self.session.products.heating) > 0:
+            for product in self.session.products.heating:
                 if ("id" in product and "state" in product and "name" in product["state"]):
                     node_name = product["state"]["name"]
-                    if len(HSC.products.heating) == 1:
+                    if len(self.session.products.heating) == 1:
                         node_name = None
-                    device_list_climate.append({'HA_DeviceType': 'Heating', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
-                    device_list_sensor.append({'HA_DeviceType': 'Heating_CurrentTemperature', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
-                    device_list_sensor.append({'HA_DeviceType': 'Heating_TargetTemperature', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
-                    device_list_sensor.append({'HA_DeviceType': 'Heating_State', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
-                    device_list_sensor.append({'HA_DeviceType': 'Heating_Mode', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
-                    device_list_sensor.append({'HA_DeviceType': 'Heating_Boost', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
+                    device_list_climate.append(
+                        {'HA_DeviceType': 'Heating', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "Heating"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'Heating_CurrentTemperature', 'Hive_NodeID': product["id"],
+                         'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'Heating_TargetTemperature', 'Hive_NodeID': product["id"],
+                         'Hive_NodeName': node_name, "Hive_DeviceType": "Heating"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'Heating_State', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "Heating"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'Heating_Mode', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "Heating"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'Heating_Boost', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "Heating"})
 
-
-        if len(HSC.products.hotwater) > 0:
-            for product in HSC.products.hotwater:
+        if len(self.session.products.hotwater) > 0:
+            for product in self.session.products.hotwater:
                 if ("id" in product and "state" in product and "name" in product["state"]):
                     node_name = product["state"]["name"]
-                    if len(HSC.products.hotwater) == 1:
+                    if len(self.session.products.hotwater) == 1:
                         node_name = None
-                    device_list_climate.append({'HA_DeviceType': 'HotWater', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "HotWater"})
-                    device_list_sensor.append({'HA_DeviceType': 'HotWater_State', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "HotWater"})
-                    device_list_sensor.append({'HA_DeviceType': 'HotWater_Mode', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "HotWater"})
-                    device_list_sensor.append({'HA_DeviceType': 'HotWater_Boost', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": "HotWater"})
+                    device_list_climate.append(
+                        {'HA_DeviceType': 'HotWater', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "HotWater"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'HotWater_State', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "HotWater"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'HotWater_Mode', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "HotWater"})
+                    device_list_sensor.append(
+                        {'HA_DeviceType': 'HotWater_Boost', 'Hive_NodeID': product["id"], 'Hive_NodeName': node_name,
+                         "Hive_DeviceType": "HotWater"})
 
-
-        if len(HSC.devices.thermostat) > 0 or len(HSC.devices.sensors) > 0:
-            all_devices = HSC.devices.thermostat + HSC.devices.sensors
+        if len(self.session.devices.thermostat) > 0 or len(self.session.devices.sensors) > 0:
+            all_devices = self.session.devices.thermostat + self.session.devices.sensors
             for a_device in all_devices:
                 if ("id" in a_device and "state" in a_device and "name" in a_device["state"]):
                     node_name = a_device["state"]["name"]
-                    if (a_device["type"] == "thermostatui" and len(HSC.devices.thermostat) == 1):
+                    if (a_device["type"] == "thermostatui" and len(self.session.devices.thermostat) == 1):
                         node_name = None
                     if "type" in a_device:
                         hive_device_type = a_device["type"]
-                        device_list_sensor.append({'HA_DeviceType': 'Hive_Device_BatteryLevel', 'Hive_NodeID': a_device["id"], 'Hive_NodeName': node_name, "Hive_DeviceType": hive_device_type})
+                        device_list_sensor.append(
+                            {'HA_DeviceType': 'Hive_Device_BatteryLevel', 'Hive_NodeID': a_device["id"],
+                             'Hive_NodeName': node_name, "Hive_DeviceType": hive_device_type})
 
-
-        if len(HSC.products.light) > 0:
-            for product in HSC.products.light:
+        if len(self.session.products.light) > 0:
+            for product in self.session.products.light:
                 if ("id" in product and "state" in product and "name" in product["state"]):
                     if "type" in product:
                         light_device_type = product["type"]
-                        device_list_light.append({'HA_DeviceType': 'Hive_Device_Light', 'Hive_Light_DeviceType': light_device_type, 'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": "Light"})
-                        device_list_sensor.append({'HA_DeviceType': 'Hive_Device_Light_Mode', 'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": light_device_type})
+                        device_list_light.append(
+                            {'HA_DeviceType': 'Hive_Device_Light', 'Hive_Light_DeviceType': light_device_type,
+                             'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"],
+                             "Hive_DeviceType": "Light"})
+                        device_list_sensor.append(
+                            {'HA_DeviceType': 'Hive_Device_Light_Mode', 'Hive_NodeID': product["id"],
+                             'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": light_device_type})
 
-
-        if len(HSC.products.plug) > 0:
-            for product in HSC.products.plug:
+        if len(self.session.products.plug) > 0:
+            for product in self.session.products.plug:
                 if ("id" in product and "state" in product and "name" in product["state"]):
                     if "type" in product:
                         plug_device_type = product["type"]
-                        device_list_plug.append({'HA_DeviceType': 'Hive_Device_Plug', 'Hive_Plug_DeviceType': plug_device_type, 'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": "Switch"})
-                        device_list_sensor.append({'HA_DeviceType': 'Hive_Device_Plug_Mode', 'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": plug_device_type})
+                        device_list_plug.append(
+                            {'HA_DeviceType': 'Hive_Device_Plug', 'Hive_Plug_DeviceType': plug_device_type,
+                             'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"],
+                             "Hive_DeviceType": "Switch"})
+                        device_list_sensor.append(
+                            {'HA_DeviceType': 'Hive_Device_Plug_Mode', 'Hive_NodeID': product["id"],
+                             'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": plug_device_type})
 
-        if len(HSC.products.sensors) > 0:
-            for product in HSC.products.sensors:
+        if len(self.session.products.sensors) > 0:
+            for product in self.session.products.sensors:
                 if ("id" in product and "state" in product and "name" in product["state"]):
                     if "type" in product:
                         hive_sensor_device_type = product["type"]
-                        device_list_binary_sensor.append({'HA_DeviceType': 'Hive_Device_Binary_Sensor', 'Hive_NodeID': product["id"], 'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": hive_sensor_device_type})
+                        device_list_binary_sensor.append(
+                            {'HA_DeviceType': 'Hive_Device_Binary_Sensor', 'Hive_NodeID': product["id"],
+                             'Hive_NodeName': product["state"]["name"], "Hive_DeviceType": hive_sensor_device_type})
 
-#        if HSC.weather.nodeid == "HiveWeather":
-#        device_list_sensor.append({'HA_DeviceType': 'Weather_OutsideTemperature', 'Hive_NodeID': HSC.weather.nodeid, 'Hive_NodeName': "Hive Weather"})
+                        #        if self.session.weather.nodeid == "HiveWeather":
+                        #        device_list_sensor.append({'HA_DeviceType': 'Weather_OutsideTemperature', 'Hive_NodeID': self.session.weather.nodeid, 'Hive_NodeName': "Hive Weather"})
 
         device_list_all['device_list_sensor'] = device_list_sensor
         device_list_all['device_list_binary_sensor'] = device_list_binary_sensor
@@ -638,1346 +655,1397 @@ class Pyhiveapi:
         return device_list_all
 
 
-    class Heating():
-        """Hive Switches."""
-        def min_temperature(self, node_id):
-            """Get heating minimum target temperature."""
-            heating_min_temp_default = 5
-            heating_min_temp_return = 0
-            heating_min_temp_tmp = 0
-            heating_min_temp_found = False
+class Pyhiveapi:
+    class Device(Enum):
+        Heating = 1
+        Hotwater = 2
+        Light = 3
+        Sensor = 4
+        Switch = 5
+        Weather = 6
 
-            heating_min_temp_tmp = heating_min_temp_default
+    def __init__(self) -> None:
+        self.hive_api = HiveAPI()
+        super().__init__()
 
-            current_node_attribute = "Heating_Min_Temperature_" + node_id
+    def initialise_api(self, username, password, mins_between_updates):
+        return self.hive_api.initialise_api(username, password, mins_between_updates)
 
-            if heating_min_temp_found:
-                NODE_ATTRIBS[current_node_attribute] = heating_min_temp_tmp
-                heating_min_temp_return = heating_min_temp_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    heating_min_temp_return = NODE_ATTRIBS.get(current_node_attribute)
+    def update_data(self, node_id):
+        self.hive_api.update_data(node_id)
+
+    def makeDevice(self, device):
+
+        class Heating():
+            """Hive Switches."""
+
+            def __init__(self, hive_api) -> None:
+                self.hive_api = hive_api
+                super().__init__()
+
+            def min_temperature(self, node_id):
+                """Get heating minimum target temperature."""
+                heating_min_temp_default = 5
+                heating_min_temp_return = 0
+                heating_min_temp_tmp = 0
+                heating_min_temp_found = False
+
+                heating_min_temp_tmp = heating_min_temp_default
+
+                current_node_attribute = "Heating_Min_Temperature_" + node_id
+
+                if heating_min_temp_found:
+                    NODE_ATTRIBS[current_node_attribute] = heating_min_temp_tmp
+                    heating_min_temp_return = heating_min_temp_tmp
                 else:
-                    heating_min_temp_return = heating_min_temp_default
+                    if current_node_attribute in NODE_ATTRIBS:
+                        heating_min_temp_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        heating_min_temp_return = heating_min_temp_default
 
-            return heating_min_temp_return
+                return heating_min_temp_return
 
+            def max_temperature(self, node_id):
+                """Get heating maximum target temperature."""
+                heating_max_temp_default = 32
+                heating_max_temp_return = 0
+                heating_max_temp_tmp = 0
+                heating_max_temp_found = False
 
-        def max_temperature(self, node_id):
-            """Get heating maximum target temperature."""
-            heating_max_temp_default = 32
-            heating_max_temp_return = 0
-            heating_max_temp_tmp = 0
-            heating_max_temp_found = False
+                heating_max_temp_tmp = heating_max_temp_default
 
-            heating_max_temp_tmp = heating_max_temp_default
+                current_node_attribute = "Heating_Max_Temperature_" + node_id
 
-            current_node_attribute = "Heating_Max_Temperature_" + node_id
-
-            if heating_max_temp_found:
-                NODE_ATTRIBS[current_node_attribute] = heating_max_temp_tmp
-                heating_max_temp_return = heating_max_temp_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    heating_max_temp_return = NODE_ATTRIBS.get(current_node_attribute)
+                if heating_max_temp_found:
+                    NODE_ATTRIBS[current_node_attribute] = heating_max_temp_tmp
+                    heating_max_temp_return = heating_max_temp_tmp
                 else:
-                    heating_max_temp_return = heating_max_temp_default
+                    if current_node_attribute in NODE_ATTRIBS:
+                        heating_max_temp_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        heating_max_temp_return = heating_max_temp_default
 
-            return heating_max_temp_return
+                return heating_max_temp_return
 
+            def current_temperature(self, node_id):
+                """Get heating current temperature."""
+                node_index = -1
 
-        def current_temperature(self, node_id):
-            """Get heating current temperature."""
-            node_index = -1
-
-            current_temp_return = 0
-            current_temp_tmp = 0
-            current_temp_found = False
-
-            current_node_attribute = "Heating_CurrentTemp_" + node_id
-
-            if len(HSC.products.heating) > 0:
-                for current_node_index in range(0, len(HSC.products.heating)):
-                    if "id" in HSC.products.heating[current_node_index]:
-                        if HSC.products.heating[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if "props" in HSC.products.heating[node_index]:
-                        if "temperature" in HSC.products.heating[node_index]["props"]:
-                            current_temp_tmp = (HSC.products.heating[node_index]
-                                                ["props"]["temperature"])
-                            current_temp_found = True
-
-            if current_temp_found:
-                NODE_ATTRIBS[current_node_attribute] = current_temp_tmp
-                current_temp_return = current_temp_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    current_temp_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    current_temp_return = -1000
-
-            if current_temp_return != -1000:
-                if node_id in HSC.data.minmax:
-                    if (HSC.data.minmax[node_id]['TodayDate'] != datetime.date(datetime.now())):
-                        HSC.data.minmax[node_id]['TodayMin'] = 1000
-                        HSC.data.minmax[node_id]['TodayMax'] = -1000
-                        HSC.data.minmax[node_id]['TodayDate'] = datetime.date(datetime.now())
-
-                    if (current_temp_return < HSC.data.minmax[node_id]['TodayMin']):
-                        HSC.data.minmax[node_id]['TodayMin'] = current_temp_return
-
-                    if (current_temp_return > HSC.data.minmax[node_id]['TodayMax']):
-                        HSC.data.minmax[node_id]['TodayMax'] = current_temp_return
-
-                    if (current_temp_return < HSC.data.minmax[node_id]['RestartMin']):
-                        HSC.data.minmax[node_id]['RestartMin'] = current_temp_return
-
-                    if (current_temp_return > HSC.data.minmax[node_id]['RestartMax']):
-                        HSC.data.minmax[node_id]['RestartMax'] = current_temp_return
-                else:
-                    current_node_max_min_data = {}
-                    current_node_max_min_data['TodayMin'] = current_temp_return
-                    current_node_max_min_data['TodayMax'] = current_temp_return
-                    current_node_max_min_data['TodayDate'] = datetime.date(datetime.now())
-                    current_node_max_min_data['RestartMin'] = current_temp_return
-                    current_node_max_min_data['RestartMax'] = current_temp_return
-                    HSC.data.minmax[node_id] = current_node_max_min_data
-            else:
                 current_temp_return = 0
+                current_temp_tmp = 0
+                current_temp_found = False
 
-            return current_temp_return
+                current_node_attribute = "Heating_CurrentTemp_" + node_id
 
-        def minmax_temperatures(self, node_id):
-            if node_id in HSC.data.minmax:
-                return HSC.data.minmax[node_id]
-            else:
-                return None
+                if len(self.hive_api.session.products.heating) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                        if "id" in self.hive_api.session.products.heating[current_node_index]:
+                            if self.hive_api.session.products.heating[current_node_index]["id"] == node_id:
+                                node_index = current_node_index
+                                break
 
-        def get_target_temperature(self, node_id):
-            """Get heating target temperature."""
-            node_index = -1
+                    if node_index != -1:
+                        if "props" in self.hive_api.session.products.heating[node_index]:
+                            if "temperature" in self.hive_api.session.products.heating[node_index]["props"]:
+                                current_temp_tmp = (self.hive_api.session.products.heating[node_index]
+                                                    ["props"]["temperature"])
+                                current_temp_found = True
 
-            heating_target_temp_return = 0
-            heating_target_temp_tmp = 0
-            heating_target_temp_found = False
+                if current_temp_found:
+                    NODE_ATTRIBS[current_node_attribute] = current_temp_tmp
+                    current_temp_return = current_temp_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        current_temp_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        current_temp_return = -1000
 
-            current_node_attribute = "Heating_TargetTemp_" + node_id
+                if current_temp_return != -1000:
+                    if node_id in self.hive_api.session.data.minmax:
+                        if self.hive_api.session.data.minmax[node_id]['TodayDate'] != datetime.date(datetime.now()):
+                            self.hive_api.session.data.minmax[node_id]['TodayMin'] = 1000
+                            self.hive_api.session.data.minmax[node_id]['TodayMax'] = -1000
+                            self.hive_api.session.data.minmax[node_id]['TodayDate'] = datetime.date(datetime.now())
 
-            # pylint: disable=too-many-nested-blocks
-            if len(HSC.products.heating) > 0:
-                for current_node_index in range(0, len(HSC.products.heating)):
-                    if "id" in HSC.products.heating[current_node_index]:
-                        if HSC.products.heating[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
+                        if current_temp_return < self.hive_api.session.data.minmax[node_id]['TodayMin']:
+                            self.hive_api.session.data.minmax[node_id]['TodayMin'] = current_temp_return
 
-                if node_index != -1:
-                    heating_mode_current = Pyhiveapi.Heating.get_mode(self, node_id)
-                    if heating_mode_current == "SCHEDULE":
-                        if ('props' in HSC.products.heating[node_index] and
-                                'scheduleOverride' in
-                                HSC.products.heating[node_index]["props"]):
-                            if (HSC.products.heating[node_index]
+                        if current_temp_return > self.hive_api.session.data.minmax[node_id]['TodayMax']:
+                            self.hive_api.session.data.minmax[node_id]['TodayMax'] = current_temp_return
+
+                        if current_temp_return < self.hive_api.session.data.minmax[node_id]['RestartMin']:
+                            self.hive_api.session.data.minmax[node_id]['RestartMin'] = current_temp_return
+
+                        if current_temp_return > self.hive_api.session.data.minmax[node_id]['RestartMax']:
+                            self.hive_api.session.data.minmax[node_id]['RestartMax'] = current_temp_return
+                    else:
+                        current_node_max_min_data = {'TodayMin': current_temp_return,
+                                                     'TodayMax': current_temp_return,
+                                                     'TodayDate': datetime.date(datetime.now()),
+                                                     'RestartMin': current_temp_return,
+                                                     'RestartMax': current_temp_return}
+                        self.hive_api.session.data.minmax[node_id] = current_node_max_min_data
+                else:
+                    current_temp_return = 0
+
+                return current_temp_return
+
+            def minmax_temperatures(self, node_id):
+                if node_id in self.hive_api.session.data.minmax:
+                    return self.hive_api.session.data.minmax[node_id]
+                else:
+                    return None
+
+            def get_target_temperature(self, node_id):
+                """Get heating target temperature."""
+                node_index = -1
+
+                heating_target_temp_return = 0
+                heating_target_temp_tmp = 0
+                heating_target_temp_found = False
+
+                current_node_attribute = "Heating_TargetTemp_" + node_id
+
+                # pylint: disable=too-many-nested-blocks
+                if len(self.hive_api.session.products.heating) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                        if "id" in self.hive_api.session.products.heating[current_node_index]:
+                            if self.hive_api.session.products.heating[current_node_index]["id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        heating_mode_current = self.hive_api.Heating.get_mode(node_id)
+                        if heating_mode_current == "SCHEDULE":
+                            if ('props' in self.hive_api.session.products.heating[node_index] and
+                                        'scheduleOverride' in
+                                        self.hive_api.session.products.heating[node_index]["props"]):
+                                if (self.hive_api.session.products.heating[node_index]
                                     ["props"]["scheduleOverride"]):
-                                if ("state" in HSC.products.heating[node_index] and
-                                        "target" in HSC.products.heating[node_index]
-                                        ["state"]):
-                                    heating_target_temp_tmp = (HSC.products.heating
-                                                               [node_index]["state"]
-                                                               ["target"])
-                                    heating_target_temp_found = True
-                            else:
-                                snan = (
-                                    Pyhiveapi.p_get_schedule_now_next_later(self, HSC.products.heating[node_index]["state"]["schedule"]))
-                                if 'now' in snan:
-                                    if ('value' in snan["now"] and
-                                            'target' in snan["now"]
-                                            ["value"]):
-                                        heating_target_temp_tmp = (snan["now"]
-                                                                   ["value"]
+                                    if ("state" in self.hive_api.session.products.heating[node_index] and
+                                                "target" in self.hive_api.session.products.heating[node_index]
+                                            ["state"]):
+                                        heating_target_temp_tmp = (self.hive_api.session.products.heating
+                                                                   [node_index]["state"]
                                                                    ["target"])
                                         heating_target_temp_found = True
+                                else:
+                                    snan = (
+                                        self.hive_api.p_get_schedule_now_next_later(
+                                            self.hive_api.session.products.heating[node_index]["state"]["schedule"]))
+                                    if 'now' in snan:
+                                        if 'value' in snan["now"] and 'target' in snan["now"]["value"]:
+                                            heating_target_temp_tmp = (snan["now"]["value"]["target"])
+                                            heating_target_temp_found = True
+                        else:
+                            if ("state" in self.hive_api.session.products.heating[node_index] and "target"
+                            in self.hive_api.session.products.heating[node_index]["state"]):
+                                heating_target_temp_tmp = \
+                                    self.hive_api.session.products.heating[node_index]["state"]["target"]
+                                heating_target_temp_found = True
+
+                if heating_target_temp_found:
+                    NODE_ATTRIBS[current_node_attribute] = heating_target_temp_tmp
+                    heating_target_temp_return = heating_target_temp_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        heating_target_temp_return = \
+                            NODE_ATTRIBS.get(current_node_attribute)
                     else:
-                        if ("state" in HSC.products.heating[node_index] and "target"
-                                in HSC.products.heating[node_index]["state"]):
-                            heating_target_temp_tmp = \
-                                HSC.products.heating[node_index]["state"]["target"]
-                            heating_target_temp_found = True
+                        heating_target_temp_return = 0
 
-            if heating_target_temp_found:
-                NODE_ATTRIBS[current_node_attribute] = heating_target_temp_tmp
-                heating_target_temp_return = heating_target_temp_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    heating_target_temp_return = \
-                        NODE_ATTRIBS.get(current_node_attribute)
+                return heating_target_temp_return
+
+            def get_mode(self, node_id):
+                """Get heating current mode."""
+                node_index = -1
+
+                mode_return = "UNKNOWN"
+                mode_tmp = "UNKNOWN"
+                mode_found = False
+
+                current_node_attribute = "Heating_Mode_" + node_id
+
+                if len(self.hive_api.session.products.heating) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                        if "id" in self.hive_api.session.products.heating[current_node_index]:
+                            if self.hive_api.session.products.heating[current_node_index]["id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("state" in self.hive_api.session.products.heating[node_index] and
+                                    "mode" in self.hive_api.session.products.heating[node_index]["state"]):
+                            mode_tmp = self.hive_api.session.products.heating[node_index]["state"]["mode"]
+                            if mode_tmp == "BOOST":
+                                if ("props" in self.hive_api.session.products.heating[node_index] and
+                                    "previous" in self.hive_api.session.products.heating[node_index]["props"] and
+                                    "mode" in self.hive_api.session.products.heating[node_index]["props"]["previous"]):
+                                    mode_tmp = (self.hive_api.session.products.heating[node_index]["props"]["previous"]["mode"])
+                            mode_found = True
+
+                if mode_found:
+                    NODE_ATTRIBS[current_node_attribute] = mode_tmp
+                    mode_return = mode_tmp
                 else:
-                    heating_target_temp_return = 0
+                    if current_node_attribute in NODE_ATTRIBS:
+                        mode_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        mode_return = "UNKNOWN"
 
-            return heating_target_temp_return
+                return mode_return
 
+            def get_state(self, node_id):
+                """Get heating current state."""
+                heating_state_return = "OFF"
+                heating_state_tmp = "OFF"
+                heating_state_found = False
 
-        def get_mode(self, node_id):
-            """Get heating current mode."""
-            node_index = -1
+                current_node_attribute = "Heating_State_" + node_id
 
-            mode_return = "UNKNOWN"
-            mode_tmp = "UNKNOWN"
-            mode_found = False
+                if len(self.hive_api.session.products.heating) > 0:
+                    temperature_current = self.hive_api.Heating.current_temperature(node_id)
+                    temperature_target = self.hive_api.Heating.get_target_temperature(node_id)
+                    heating_boost = self.hive_api.Heating.get_boost(node_id)
+                    heating_mode = self.hive_api.Heating.get_mode(node_id)
 
-            current_node_attribute = "Heating_Mode_" + node_id
-
-            if len(HSC.products.heating) > 0:
-                for current_node_index in range(0, len(HSC.products.heating)):
-                    if "id" in HSC.products.heating[current_node_index]:
-                        if HSC.products.heating[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.heating[node_index] and
-                            "mode" in HSC.products.heating[node_index]["state"]):
-                        mode_tmp = HSC.products.heating[node_index]["state"]["mode"]
-                        if mode_tmp == "BOOST":
-                            if ("props" in HSC.products.heating[node_index] and
-                                    "previous" in
-                                    HSC.products.heating[node_index]["props"] and
-                                    "mode" in
-                                    HSC.products.heating[node_index]
-                                    ["props"]["previous"]):
-                                mode_tmp = (HSC.products.heating[node_index]
-                                            ["props"]["previous"]["mode"])
-                        mode_found = True
-
-            if mode_found:
-                NODE_ATTRIBS[current_node_attribute] = mode_tmp
-                mode_return = mode_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    mode_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    mode_return = "UNKNOWN"
-
-            return mode_return
-
-
-        def get_state(self, node_id):
-            """Get heating current state."""
-            heating_state_return = "OFF"
-            heating_state_tmp = "OFF"
-            heating_state_found = False
-
-            current_node_attribute = "Heating_State_" + node_id
-
-            if len(HSC.products.heating) > 0:
-                temperature_current = Pyhiveapi.Heating.current_temperature(self, node_id)
-                temperature_target = Pyhiveapi.Heating.get_target_temperature(self, node_id)
-                heating_boost = Pyhiveapi.Heating.get_boost(self, node_id)
-                heating_mode = Pyhiveapi.Heating.get_mode(self, node_id)
-
-                if (heating_mode == "SCHEDULE" or
-                        heating_mode == "MANUAL" or
-                        heating_boost == "ON"):
-                    if temperature_current < temperature_target:
-                        heating_state_tmp = "ON"
-                        heating_state_found = True
+                    if (heating_mode == "SCHEDULE" or
+                                heating_mode == "MANUAL" or
+                                heating_boost == "ON"):
+                        if temperature_current < temperature_target:
+                            heating_state_tmp = "ON"
+                            heating_state_found = True
+                        else:
+                            heating_state_tmp = "OFF"
+                            heating_state_found = True
                     else:
                         heating_state_tmp = "OFF"
                         heating_state_found = True
+
+                if heating_state_found:
+                    NODE_ATTRIBS[current_node_attribute] = heating_state_tmp
+                    heating_state_return = heating_state_tmp
                 else:
-                    heating_state_tmp = "OFF"
-                    heating_state_found = True
+                    if current_node_attribute in NODE_ATTRIBS:
+                        heating_state_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        heating_state_return = "UNKNOWN"
 
-            if heating_state_found:
-                NODE_ATTRIBS[current_node_attribute] = heating_state_tmp
-                heating_state_return = heating_state_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    heating_state_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    heating_state_return = "UNKNOWN"
+                return heating_state_return
 
-            return heating_state_return
-
-
-        def get_boost(self, node_id):
-            """Get heating boost current status."""
-            node_index = -1
-
-            heating_boost_return = "UNKNOWN"
-            heating_boost_tmp = "UNKNOWN"
-            heating_boost_found = False
-
-            current_node_attribute = "Heating_Boost_" + node_id
-
-            if len(HSC.products.heating) > 0:
-                for current_node_index in range(0, len(HSC.products.heating)):
-                    if "id" in HSC.products.heating[current_node_index]:
-                        if HSC.products.heating[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.heating[node_index] and
-                            "boost" in HSC.products.heating[node_index]["state"]):
-                        heating_boost_tmp = (HSC.products.heating[node_index]
-                                             ["state"]["boost"])
-                        if heating_boost_tmp is None:
-                            heating_boost_tmp = "OFF"
-                        else:
-                            heating_boost_tmp = "ON"
-                        heating_boost_found = True
-
-            if heating_boost_found:
-                NODE_ATTRIBS[current_node_attribute] = heating_boost_tmp
-                heating_boost_return = heating_boost_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    heating_boost_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    heating_boost_return = "UNKNOWN"
-
-            return heating_boost_return
-
-
-        def get_boost_time(self, node_id):
-            """Get heating boost time remaining."""
-            heating_boost = "UNKNOWN"
-
-            if Pyhiveapi.Heating.get_boost(self, node_id) == "ON":
+            def get_boost(self, node_id):
+                """Get heating boost current status."""
                 node_index = -1
 
+                heating_boost_return = "UNKNOWN"
                 heating_boost_tmp = "UNKNOWN"
                 heating_boost_found = False
 
-                if len(HSC.products.heating) > 0:
-                    for current_node_index in range(0, len(HSC.products.heating)):
-                        if "id" in HSC.products.heating[current_node_index]:
-                            if (HSC.products.heating[current_node_index]["id"] == node_id):
+                current_node_attribute = "Heating_Boost_" + node_id
+
+                if len(self.hive_api.session.products.heating) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                        if "id" in self.hive_api.session.products.heating[current_node_index]:
+                            if self.hive_api.session.products.heating[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
 
                     if node_index != -1:
-                        if ("state" in HSC.products.heating[node_index] and "boost" in HSC.products.heating[node_index]["state"]):
-                            heating_boost_tmp = (HSC.products.heating[node_index]["state"]["boost"])
+                        if ("state" in self.hive_api.session.products.heating[node_index] and
+                                    "boost" in self.hive_api.session.products.heating[node_index]["state"]):
+                            heating_boost_tmp = (self.hive_api.session.products.heating[node_index]
+                                                 ["state"]["boost"])
+                            if heating_boost_tmp is None:
+                                heating_boost_tmp = "OFF"
+                            else:
+                                heating_boost_tmp = "ON"
                             heating_boost_found = True
 
                 if heating_boost_found:
-                    heating_boost = heating_boost_tmp
-
-            return heating_boost
-
-
-        def get_operation_modes(self, node_id):
-            """Get heating list of possible modes."""
-            heating_operation_list = ["SCHEDULE", "MANUAL", "OFF"]
-            return heating_operation_list
-
-
-        def get_schedule_now_next_later(self, node_id):
-            """Hive get heating schedule now, next and later."""
-            heating_mode_current = Pyhiveapi.Heating.get_mode(self, node_id)
-
-            snan = None
-
-            if heating_mode_current == "SCHEDULE":
-                node_index = -1
-
-                if len(HSC.products.heating) > 0:
-                    for current_node_index in range(0, len(HSC.products.heating)):
-                        if "id" in HSC.products.heating[current_node_index]:
-                            if HSC.products.heating[current_node_index]["id"] == node_id:
-                                node_index = current_node_index
-                                break
-
-                if node_index != -1:
-                    snan = Pyhiveapi.p_get_schedule_now_next_later(self, HSC.products.heating[node_index]["state"]["schedule"])
+                    NODE_ATTRIBS[current_node_attribute] = heating_boost_tmp
+                    heating_boost_return = heating_boost_tmp
                 else:
-                    snan = None
-            else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        heating_boost_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        heating_boost_return = "UNKNOWN"
+
+                return heating_boost_return
+
+            def get_boost_time(self, node_id):
+                """Get heating boost time remaining."""
+                heating_boost = "UNKNOWN"
+
+                if self.hive_api.Heating.get_boost(node_id) == "ON":
+                    node_index = -1
+
+                    heating_boost_tmp = "UNKNOWN"
+                    heating_boost_found = False
+
+                    if len(self.hive_api.session.products.heating) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                            if "id" in self.hive_api.session.products.heating[current_node_index]:
+                                if (self.hive_api.session.products.heating[current_node_index]["id"] == node_id):
+                                    node_index = current_node_index
+                                    break
+
+                        if node_index != -1:
+                            if ("state" in self.hive_api.session.products.heating[node_index] and "boost" in
+                                self.hive_api.session.products.heating[node_index]["state"]):
+                                heating_boost_tmp = (self.hive_api.session.products.heating[node_index]["state"]["boost"])
+                                heating_boost_found = True
+
+                    if heating_boost_found:
+                        heating_boost = heating_boost_tmp
+
+                return heating_boost
+
+            def get_operation_modes(self, node_id):
+                """Get heating list of possible modes."""
+                heating_operation_list = ["SCHEDULE", "MANUAL", "OFF"]
+                return heating_operation_list
+
+            def get_schedule_now_next_later(self, node_id):
+                """Hive get heating schedule now, next and later."""
+                heating_mode_current = self.hive_api.Heating.get_mode(node_id)
+
                 snan = None
 
-            return snan
+                if heating_mode_current == "SCHEDULE":
+                    node_index = -1
 
+                    if len(self.hive_api.session.products.heating) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                            if "id" in self.hive_api.session.products.heating[current_node_index]:
+                                if self.hive_api.session.products.heating[current_node_index]["id"] == node_id:
+                                    node_index = current_node_index
+                                    break
 
-        def set_target_temperature(self, node_id, new_temperature):
-            """Set heating target temperature."""
-            Pyhiveapi.check_hive_api_logon(self)
+                    if node_index != -1:
+                        snan = self.hive_api.p_get_schedule_now_next_later(
+                            self.hive_api.session.products.heating[node_index]["state"]["schedule"])
+                    else:
+                        snan = None
+                else:
+                    snan = None
 
-            set_temperature_success = False
-            api_resp_d = {}
-            api_resp = ""
+                return snan
 
-            if HSC.session_id is not None:
+            def set_target_temperature(self, node_id, new_temperature):
+                """Set heating target temperature."""
+                self.hive_api.check_hive_api_logon()
+
+                set_temperature_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    node_index = -1
+                    if len(self.hive_api.session.products.heating) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                            if "id" in self.hive_api.session.products.heating[current_node_index]:
+                                if (self.hive_api.session.products.heating[current_node_index]["id"] == node_id):
+                                    node_index = current_node_index
+                                    break
+
+                        if node_index != -1:
+                            if "id" in self.hive_api.session.products.heating[node_index]:
+                                json_string_content = ('{"target":' + str(new_temperature) + '}')
+
+                                hive_api_url = (
+                                    self.hive_api.details.urls.nodes + "/heating/" +
+                                    self.hive_api.session.products.heating[node_index][
+                                        "id"])
+                                api_resp_d = self.hive_api.hive_api_json_call("POST", hive_api_url, json_string_content,
+                                                                              False)
+
+                                api_resp = api_resp_d['original']
+
+                                if str(api_resp) == "<Response [200]>":
+                                    self.hive_api.hive_api_get_nodes(node_id)
+                                    #                                fire_bus_event(node_id, device_type)
+                                    set_temperature_success = True
+
+                return set_temperature_success
+
+            def set_mode(self, node_id, new_mode):
+                """Set heating mode."""
+                self.hive_api.check_hive_api_logon()
+
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    node_index = -1
+                    if len(self.hive_api.session.products.heating) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.heating)):
+                            if "id" in self.hive_api.session.products.heating[current_node_index]:
+                                if (self.hive_api.session.products.heating[current_node_index]["id"] == node_id):
+                                    node_index = current_node_index
+                                    break
+
+                        if node_index != -1:
+                            if "id" in self.hive_api.session.products.heating[node_index]:
+                                json_string_content = ""
+                                if new_mode == "SCHEDULE":
+                                    json_string_content = '{"mode": "SCHEDULE"}'
+                                elif new_mode == "MANUAL":
+                                    json_string_content = '{"mode": "MANUAL"}'
+                                elif new_mode == "OFF":
+                                    json_string_content = '{"mode": "OFF"}'
+
+                                if (new_mode == "SCHEDULE" or new_mode == "MANUAL" or new_mode == "OFF"):
+                                    hive_api_url = (self.hive_api.details.urls.nodes + "/heating/" +
+                                                    self.hive_api.session.products.heating[node_index]["id"])
+                                    api_resp_d = self.hive_api.hive_api_json_call("POST", hive_api_url,
+                                                                                  json_string_content, False)
+
+                                    api_resp = api_resp_d['original']
+
+                                    if str(api_resp) == "<Response [200]>":
+                                        self.hive_api.hive_api_get_nodes(node_id)
+                                        set_mode_success = True
+
+                return set_mode_success
+
+        class Hotwater():
+            """Hive Hotwater."""
+
+            def __init__(self, hive_api) -> None:
+                self.hive_api = hive_api
+                super().__init__()
+
+            def get_mode(self, node_id):
+                """Get hot water current mode."""
                 node_index = -1
-                if len(HSC.products.heating) > 0:
-                    for current_node_index in range(0, len(HSC.products.heating)):
-                        if "id" in HSC.products.heating[current_node_index]:
-                            if (HSC.products.heating[current_node_index]["id"] == node_id):
+
+                hotwater_mode_return = "UNKNOWN"
+                hotwater_mode_tmp = "UNKNOWN"
+                hotwater_mode_found = False
+
+                current_node_attribute = "HotWater_Mode_" + node_id
+
+                if len(self.hive_api.session.products.hotwater) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.hotwater)):
+                        if "id" in self.hive_api.session.products.hotwater[current_node_index]:
+                            if self.hive_api.session.products.hotwater[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
 
                     if node_index != -1:
-                        if "id" in HSC.products.heating[node_index]:
-                            json_string_content = ('{"target":' + str(new_temperature) + '}')
+                        if ("state" in self.hive_api.session.products.hotwater[node_index] and
+                                    "mode" in self.hive_api.session.products.hotwater[node_index]["state"]):
+                            hotwater_mode_tmp = (self.hive_api.session.products.hotwater[node_index]
+                                                 ["state"]["mode"])
+                            if hotwater_mode_tmp == "BOOST":
+                                if ("props" in self.hive_api.session.products.hotwater[node_index] and
+                                    "previous" in self.hive_api.session.products.hotwater[node_index]["props"] and
+                                    "mode" in self.hive_api.session.products.hotwater[node_index]["props"]["previous"]):
+                                    hotwater_mode_tmp = (self.hive_api.session.products.hotwater[node_index]
+                                                         ["props"]["previous"]["mode"])
+                            elif hotwater_mode_tmp == "MANUAL":
+                                hotwater_mode_tmp = "ON"
+                            hotwater_mode_found = True
 
-                            hive_api_url = (HIVE_API.urls.nodes + "/heating/" + HSC.products.heating[node_index]["id"])
-                            api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST", hive_api_url, json_string_content, False)
+                if hotwater_mode_found:
+                    NODE_ATTRIBS[current_node_attribute] = hotwater_mode_tmp
+                    hotwater_mode_return = hotwater_mode_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        hotwater_mode_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        hotwater_mode_return = "UNKNOWN"
+
+                return hotwater_mode_return
+
+            def get_operation_modes(self, node_id):
+                """Get heating list of possible modes."""
+                hotwater_operation_list = ["SCHEDULE", "ON", "OFF"]
+                return hotwater_operation_list
+
+            def get_boost(self, node_id):
+                """Get hot water current boost status."""
+                node_index = -1
+
+                hotwater_boost_return = "UNKNOWN"
+                hotwater_boost_tmp = "UNKNOWN"
+                hotwater_boost_found = False
+
+                current_node_attribute = "HotWater_Boost_" + node_id
+
+                if len(self.hive_api.session.products.hotwater) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.hotwater)):
+                        if "id" in self.hive_api.session.products.hotwater[current_node_index]:
+                            if self.hive_api.session.products.hotwater[current_node_index]["id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("state" in self.hive_api.session.products.hotwater[node_index] and
+                                    "boost" in self.hive_api.session.products.hotwater[node_index]["state"]):
+                            hotwater_boost_tmp = (self.hive_api.session.products.hotwater[node_index]
+                                                  ["state"]["boost"])
+                            if hotwater_boost_tmp is None:
+                                hotwater_boost_tmp = "OFF"
+                            else:
+                                hotwater_boost_tmp = "ON"
+                            hotwater_boost_found = True
+
+                if hotwater_boost_found:
+                    NODE_ATTRIBS[current_node_attribute] = hotwater_boost_tmp
+                    hotwater_boost_return = hotwater_boost_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        hotwater_boost_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        hotwater_boost_return = "UNKNOWN"
+
+                return hotwater_boost_return
+
+            def get_boost_time(self, node_id):
+                """Get hotwater boost time remaining."""
+                hotwater_boost = "UNKNOWN"
+
+                if self.hive_api.Hotwater.get_boost(node_id) == "ON":
+                    node_index = -1
+
+                    hotwater_boost_tmp = "UNKNOWN"
+                    hotwater_boost_found = False
+
+                    if len(self.hive_api.session.products.hotwater) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.hotwater)):
+                            if "id" in self.hive_api.session.products.hotwater[current_node_index]:
+                                if (self.hive_api.session.products.hotwater[current_node_index]["id"] == node_id):
+                                    node_index = current_node_index
+                                    break
+
+                        if node_index != -1:
+                            if ("state" in self.hive_api.session.products.hotwater[node_index] and "boost" in
+                                self.hive_api.session.products.hotwater[node_index]["state"]):
+                                hotwater_boost_tmp = (self.hive_api.session.products.hotwater[node_index]["state"]["boost"])
+                                hotwater_boost_found = True
+
+                    if hotwater_boost_found:
+                        hotwater_boost = hotwater_boost_tmp
+
+                return hotwater_boost
+
+            def get_state(self, node_id):
+                """Get hot water current state."""
+                node_index = -1
+
+                state_return = "OFF"
+                state_tmp = "OFF"
+                state_found = False
+                mode_current = self.hive_api.Hotwater.get_mode(node_id)
+
+                current_node_attribute = "HotWater_State_" + node_id
+
+                if len(self.hive_api.session.products.hotwater) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.hotwater)):
+                        if "id" in self.hive_api.session.products.hotwater[current_node_index]:
+                            if self.hive_api.session.products.hotwater[current_node_index]["id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("state" in self.hive_api.session.products.hotwater[node_index] and
+                                    "status" in self.hive_api.session.products.hotwater[node_index]["state"]):
+                            state_tmp = (self.hive_api.session.products.hotwater[node_index]
+                                         ["state"]["status"])
+                            if state_tmp is None:
+                                state_tmp = "OFF"
+                            else:
+                                if mode_current == "SCHEDULE":
+                                    if self.hive_api.Hotwater.get_boost(node_id) == "ON":
+                                        state_tmp = "ON"
+                                        state_found = True
+                                    else:
+                                        if ("state" in
+                                                self.hive_api.session.products.hotwater[node_index] and
+                                                    "schedule" in
+                                                    self.hive_api.session.products.hotwater[node_index]
+                                                    ["state"]):
+                                            snan = self.hive_api.p_get_schedule_now_next_later(
+                                                self.hive_api.session.products.hotwater[node_index]["state"]["schedule"])
+                                            if 'now' in snan:
+                                                if ('value' in snan["now"] and
+                                                            'status' in snan["now"]["value"]):
+                                                    state_tmp = (snan["now"]["value"]
+                                                                 ["status"])
+                                                    state_found = True
+                                else:
+                                    state_found = True
+
+                if state_found:
+                    NODE_ATTRIBS[current_node_attribute] = state_tmp
+                    state_return = state_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        state_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        state_return = "UNKNOWN"
+
+                return state_return
+
+            def get_schedule_now_next_later(self, node_id):
+                """Hive get hotwater schedule now, next and later."""
+                hotwater_mode_current = self.hive_api.Hotwater.get_mode(node_id)
+
+                snan = None
+
+                if hotwater_mode_current == "SCHEDULE":
+                    node_index = -1
+
+                    if len(self.hive_api.session.products.hotwater) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.hotwater)):
+                            if "id" in self.hive_api.session.products.hotwater[current_node_index]:
+                                if self.hive_api.session.products.hotwater[current_node_index]["id"] == node_id:
+                                    node_index = current_node_index
+                                    break
+
+                    if node_index != -1:
+                        snan = self.hive_api.p_get_schedule_now_next_later(
+                            self.hive_api.session.products.hotwater[node_index]["state"]["schedule"])
+                    else:
+                        snan = None
+                else:
+                    snan = None
+
+                return snan
+
+            def set_mode(self, node_id, new_mode):
+                """Set hot water mode."""
+                self.hive_api.check_hive_api_logon()
+
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    node_index = -1
+                    if len(self.hive_api.session.products.hotwater) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.hotwater)):
+                            if "id" in self.hive_api.session.products.hotwater[current_node_index]:
+                                if (self.hive_api.session.products.hotwater[current_node_index]["id"] == node_id):
+                                    node_index = current_node_index
+                                    break
+
+                        if node_index != -1:
+                            if "id" in self.hive_api.session.products.hotwater[node_index]:
+                                json_string_content = ""
+                                if new_mode == "SCHEDULE":
+                                    json_string_content = '{"mode": "SCHEDULE"}'
+                                elif new_mode == "ON":
+                                    json_string_content = '{"mode": "MANUAL"}'
+                                elif new_mode == "OFF":
+                                    json_string_content = '{"mode": "OFF"}'
+
+                                if (new_mode == "SCHEDULE" or new_mode == "ON" or new_mode == "OFF"):
+                                    hive_api_url = (self.hive_api.details.urls.nodes + "/hotwater/" +
+                                                    self.hive_api.session.products.hotwater[node_index]["id"])
+                                    api_resp_d = self.hive_api.hive_api_json_call("POST", hive_api_url,
+                                                                                  json_string_content, False)
+
+                                    api_resp = api_resp_d['original']
+
+                                    if str(api_resp) == "<Response [200]>":
+                                        self.hive_api.hive_api_get_nodes(node_id)
+                                        #                                    fire_bus_event(node_id, device_type)
+                                        set_mode_success = True
+
+                return set_mode_success
+
+        class Light():
+            """Hive Lights."""
+
+            def __init__(self, hive_api) -> None:
+                self.hive_api = hive_api
+                super().__init__()
+
+            def get_state(self, node_id):
+                """Get light current state."""
+                node_index = -1
+
+                light_state_return = "UNKNOWN"
+                light_state_tmp = "UNKNOWN"
+                light_state_found = False
+
+                current_node_attribute = "Light_State_" + node_id
+
+                if len(self.hive_api.session.products.light) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.light)):
+                        if "id" in self.hive_api.session.products.light[current_node_index]:
+                            if self.hive_api.session.products.light[current_node_index][
+                                "id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("state" in self.hive_api.session.products.light[
+                            node_index] and "status" in
+                            self.hive_api.session.products.light[node_index]["state"]):
+                            light_state_tmp = (self.hive_api.session.products.light[node_index]
+                                               ["state"]["status"])
+                            light_state_found = True
+
+                if light_state_found:
+                    NODE_ATTRIBS[current_node_attribute] = light_state_tmp
+                    light_state_return = light_state_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        light_state_return = NODE_ATTRIBS.get(
+                            current_node_attribute)
+                    else:
+                        light_state_return = "UNKNOWN"
+
+                light_state_return_b = False
+
+                if light_state_return == "ON":
+                    light_state_return_b = True
+
+                return light_state_return_b
+
+            def get_brightness(self, node_id):
+                """Get light current brightness."""
+                node_index = -1
+
+                tmp_brightness_return = 0
+                light_brightness_return = 0
+                light_brightness_tmp = 0
+                light_brightness_found = False
+
+                current_node_attribute = "Light_Brightness_" + node_id
+
+                if len(self.hive_api.session.products.light) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.light)):
+                        if "id" in self.hive_api.session.products.light[current_node_index]:
+                            if self.hive_api.session.products.light[current_node_index][
+                                "id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("state" in self.hive_api.session.products.light[
+                            node_index] and "brightness" in
+                            self.hive_api.session.products.light[node_index]["state"]):
+                            light_brightness_tmp = (self.hive_api.session.products.light[node_index]
+                                                    ["state"]["brightness"])
+                            light_brightness_found = True
+
+                if light_brightness_found:
+                    NODE_ATTRIBS[current_node_attribute] = light_brightness_tmp
+                    tmp_brightness_return = light_brightness_tmp
+                    light_brightness_return = ((tmp_brightness_return / 100) * 255)
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        tmp_brightness_return = NODE_ATTRIBS.get(
+                            current_node_attribute)
+                        light_brightness_return = (
+                            (tmp_brightness_return / 100) * 255)
+                    else:
+                        light_brightness_return = 0
+
+                return light_brightness_return
+
+            def get_min_colour_temp(self, node_id):
+                """Get light minimum colour temperature."""
+                node_index = -1
+
+                light_min_color_temp_tmp = 0
+                light_min_color_temp_return = 0
+                light_min_color_temp_found = False
+
+                node_attrib = "Light_Min_Color_Temp_" + node_id
+
+                if len(self.hive_api.session.products.light) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.light)):
+                        if "id" in self.hive_api.session.products.light[current_node_index]:
+                            if self.hive_api.session.products.light[current_node_index][
+                                "id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("props" in self.hive_api.session.products.light[node_index] and
+                                    "colourTemperature" in
+                                    self.hive_api.session.products.light[node_index][
+                                        "props"] and "max" in
+                            self.hive_api.session.products.light[node_index]
+                            ["props"]["colourTemperature"]):
+                            light_min_color_temp_tmp = (
+                                self.hive_api.session.products.light[node_index]
+                                ["props"]
+                                ["colourTemperature"]["max"])
+                            light_min_color_temp_found = True
+
+                if light_min_color_temp_found:
+                    NODE_ATTRIBS[node_attrib] = light_min_color_temp_tmp
+                    light_min_color_temp_return = round(
+                        (1 / light_min_color_temp_tmp)
+                        * 1000000)
+                else:
+                    if node_attrib in NODE_ATTRIBS:
+                        light_min_color_temp_return = (
+                            NODE_ATTRIBS.get(node_attrib))
+                    else:
+                        light_min_color_temp_return = 0
+
+                return light_min_color_temp_return
+
+            def get_max_colour_temp(self, node_id):
+                """Get light maximum colour temperature."""
+                node_index = -1
+
+                light_max_color_temp_tmp = 0
+                light_max_color_temp_return = 0
+                light_max_color_temp_found = False
+
+                node_attrib = "Light_Max_Color_Temp_" + node_id
+
+                if len(self.hive_api.session.products.light) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.light)):
+                        if "id" in self.hive_api.session.products.light[current_node_index]:
+                            if self.hive_api.session.products.light[current_node_index][
+                                "id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("props" in self.hive_api.session.products.light[node_index] and
+                                    "colourTemperature" in
+                                    self.hive_api.session.products.light[node_index]["props"] and
+                                    "min" in
+                                    self.hive_api.session.products.light[node_index]["props"]
+                                    ["colourTemperature"]):
+                            light_max_color_temp_tmp = (
+                                self.hive_api.session.products.light[node_index]
+                                ["props"]["colourTemperature"]
+                                ["min"])
+                            light_max_color_temp_found = True
+
+                if light_max_color_temp_found:
+                    NODE_ATTRIBS[node_attrib] = light_max_color_temp_tmp
+                    light_max_color_temp_return = round(
+                        (1 / light_max_color_temp_tmp)
+                        * 1000000)
+                else:
+                    if node_attrib in NODE_ATTRIBS:
+                        light_max_color_temp_return = NODE_ATTRIBS.get(node_attrib)
+                    else:
+                        light_max_color_temp_return = 0
+
+                return light_max_color_temp_return
+
+            def get_color_temp(self, node_id):
+                """Get light current colour temperature."""
+                node_index = -1
+
+                light_color_temp_tmp = 0
+                light_color_temp_return = 0
+                light_color_temp_found = False
+
+                current_node_attribute = "Light_Color_Temp_" + node_id
+
+                if len(self.hive_api.session.products.light) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.light)):
+                        if "id" in self.hive_api.session.products.light[current_node_index]:
+                            if self.hive_api.session.products.light[current_node_index][
+                                "id"] == node_id:
+                                node_index = current_node_index
+                                break
+
+                    if node_index != -1:
+                        if ("state" in self.hive_api.session.products.light[node_index] and
+                                    "colourTemperature" in
+                                    self.hive_api.session.products.light[node_index]["state"]):
+                            light_color_temp_tmp = (self.hive_api.session.products.light[node_index]
+                                                    ["state"]["colourTemperature"])
+                            light_color_temp_found = True
+
+                if light_color_temp_found:
+                    NODE_ATTRIBS[current_node_attribute] = light_color_temp_tmp
+                    light_color_temp_return = round(
+                        (1 / light_color_temp_tmp) * 1000000)
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        light_color_temp_return = NODE_ATTRIBS.get(
+                            current_node_attribute)
+                    else:
+                        light_color_temp_return = 0
+
+                return light_color_temp_return
+
+            def turn_off(self, node_id):
+                """Set light to turn off."""
+                self.hive_api.check_hive_api_logon()
+
+                node_index = -1
+
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    if len(self.hive_api.session.products.light) > 0:
+                        for current_node_index in range(0,
+                                                        len(self.hive_api.session.products.light)):
+                            if "id" in self.hive_api.session.products.light[current_node_index]:
+                                if (self.hive_api.session.products.light[current_node_index]
+                                    ["id"] == node_id):
+                                    node_index = current_node_index
+                                    break
+                        if node_index != -1:
+                            json_string_content = '{"status": "OFF"}'
+                            hive_api_url = (self.hive_api.details.urls.nodes
+                                            + '/'
+                                            + self.hive_api.session.products.light[node_index]["type"]
+                                            + '/'
+                                            + self.hive_api.session.products.light[node_index]["id"])
+                            api_resp_d = self.hive_api.hive_api_json_call("POST",
+                                                                          hive_api_url,
+                                                                          json_string_content,
+                                                                          False)
 
                             api_resp = api_resp_d['original']
 
                             if str(api_resp) == "<Response [200]>":
-                                Pyhiveapi.hive_api_get_nodes(self, node_id)
-#                                fire_bus_event(node_id, device_type)
-                                set_temperature_success = True
+                                self.hive_api.hive_api_get_nodes(node_id)
+                                set_mode_success = True
 
-            return set_temperature_success
+                return set_mode_success
 
+            def turn_on(self, node_id):
+                """Set light to turn on."""
+                self.hive_api.check_hive_api_logon()
 
-        def set_mode(self, node_id, new_mode):
-            """Set heating mode."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
-                node_index = -1
-                if len(HSC.products.heating) > 0:
-                    for current_node_index in range(0, len(HSC.products.heating)):
-                        if "id" in HSC.products.heating[current_node_index]:
-                            if (HSC.products.heating[current_node_index]["id"] == node_id):
-                                node_index = current_node_index
-                                break
-
-                    if node_index != -1:
-                        if "id" in HSC.products.heating[node_index]:
-                            if new_mode == "SCHEDULE":
-                                json_string_content = '{"mode": "SCHEDULE"}'
-                            elif new_mode == "MANUAL":
-                                json_string_content = '{"mode": "MANUAL"}'
-                            elif new_mode == "OFF":
-                                json_string_content = '{"mode": "OFF"}'
-
-                            if (new_mode == "SCHEDULE" or new_mode == "MANUAL" or new_mode == "OFF"):
-                                hive_api_url = (HIVE_API.urls.nodes + "/heating/" + HSC.products.heating[node_index]["id"])
-                                api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST", hive_api_url, json_string_content, False)
-
-                                api_resp = api_resp_d['original']
-
-                                if str(api_resp) == "<Response [200]>":
-                                    Pyhiveapi.hive_api_get_nodes(self, node_id)
-                                    set_mode_success = True
-
-            return set_mode_success
-
-    class Hotwater():
-        """Hive Hotwater."""
-        def get_mode(self, node_id):
-            """Get hot water current mode."""
-            node_index = -1
-
-            hotwater_mode_return = "UNKNOWN"
-            hotwater_mode_tmp = "UNKNOWN"
-            hotwater_mode_found = False
-
-            current_node_attribute = "HotWater_Mode_" + node_id
-
-            if len(HSC.products.hotwater) > 0:
-                for current_node_index in range(0, len(HSC.products.hotwater)):
-                    if "id" in HSC.products.hotwater[current_node_index]:
-                        if HSC.products.hotwater[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.hotwater[node_index] and
-                            "mode" in HSC.products.hotwater[node_index]["state"]):
-                        hotwater_mode_tmp = (HSC.products.hotwater[node_index]
-                                             ["state"]["mode"])
-                        if hotwater_mode_tmp == "BOOST":
-                            if ("props" in HSC.products.hotwater[node_index] and
-                                    "previous" in
-                                    HSC.products.hotwater[node_index]["props"] and
-                                    "mode" in
-                                    HSC.products.hotwater[node_index]
-                                    ["props"]["previous"]):
-                                hotwater_mode_tmp = (HSC.products.hotwater[node_index]
-                                                     ["props"]["previous"]["mode"])
-                        elif hotwater_mode_tmp == "MANUAL":
-                            hotwater_mode_tmp = "ON"
-                        hotwater_mode_found = True
-
-            if hotwater_mode_found:
-                NODE_ATTRIBS[current_node_attribute] = hotwater_mode_tmp
-                hotwater_mode_return = hotwater_mode_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    hotwater_mode_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    hotwater_mode_return = "UNKNOWN"
-
-            return hotwater_mode_return
-
-
-        def get_operation_modes(self, node_id):
-            """Get heating list of possible modes."""
-            hotwater_operation_list = ["SCHEDULE", "ON", "OFF"]
-            return hotwater_operation_list
-
-
-        def get_boost(self, node_id):
-            """Get hot water current boost status."""
-            node_index = -1
-
-            hotwater_boost_return = "UNKNOWN"
-            hotwater_boost_tmp = "UNKNOWN"
-            hotwater_boost_found = False
-
-            current_node_attribute = "HotWater_Boost_" + node_id
-
-            if len(HSC.products.hotwater) > 0:
-                for current_node_index in range(0, len(HSC.products.hotwater)):
-                    if "id" in HSC.products.hotwater[current_node_index]:
-                        if HSC.products.hotwater[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.hotwater[node_index] and
-                            "boost" in HSC.products.hotwater[node_index]["state"]):
-                        hotwater_boost_tmp = (HSC.products.hotwater[node_index]
-                                              ["state"]["boost"])
-                        if hotwater_boost_tmp is None:
-                            hotwater_boost_tmp = "OFF"
-                        else:
-                            hotwater_boost_tmp = "ON"
-                        hotwater_boost_found = True
-
-            if hotwater_boost_found:
-                NODE_ATTRIBS[current_node_attribute] = hotwater_boost_tmp
-                hotwater_boost_return = hotwater_boost_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    hotwater_boost_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    hotwater_boost_return = "UNKNOWN"
-
-            return hotwater_boost_return
-
-
-        def get_boost_time(self, node_id):
-            """Get hotwater boost time remaining."""
-            hotwater_boost = "UNKNOWN"
-
-            if Pyhiveapi.Hotwater.get_boost(self, node_id) == "ON":
                 node_index = -1
 
-                hotwater_boost_tmp = "UNKNOWN"
-                hotwater_boost_found = False
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
 
-                if len(HSC.products.hotwater) > 0:
-                    for current_node_index in range(0, len(HSC.products.hotwater)):
-                        if "id" in HSC.products.hotwater[current_node_index]:
-                            if (HSC.products.hotwater[current_node_index]["id"] == node_id):
-                                node_index = current_node_index
-                                break
+                if self.hive_api.session.session_id is not None:
+                    if len(self.hive_api.session.products.light) > 0:
+                        for cni in range(0, len(self.hive_api.session.products.light)):
+                            if "id" in self.hive_api.session.products.light[cni]:
+                                if self.hive_api.session.products.light[cni]["id"] == node_id:
+                                    node_index = cni
+                                    break
+                        if node_index != -1:
+                            json_string_content = '{"status": "ON"}'
+                            hive_api_url = (self.hive_api.details.urls.nodes
+                                            + '/' + self.hive_api.session.products.light[node_index][
+                                                "type"]
+                                            + '/' + self.hive_api.session.products.light[node_index][
+                                                "id"])
+                            api_resp_d = self.hive_api.hive_api_json_call("POST",
+                                                                          hive_api_url,
+                                                                          json_string_content,
+                                                                          False)
 
-                    if node_index != -1:
-                        if ("state" in HSC.products.hotwater[node_index] and "boost" in HSC.products.hotwater[node_index]["state"]):
-                            hotwater_boost_tmp = (HSC.products.hotwater[node_index]["state"]["boost"])
-                            hotwater_boost_found = True
+                            api_resp = api_resp_d['original']
 
-                if hotwater_boost_found:
-                    hotwater_boost = hotwater_boost_tmp
+                        if str(api_resp) == "<Response [200]>":
+                            self.hive_api.hive_api_get_nodes(node_id)
+                            set_mode_success = True
 
-            return hotwater_boost
+                return set_mode_success
 
+            def set_brightness(self, node_id, new_brightness):
+                """Set light to turn on."""
+                self.hive_api.check_hive_api_logon()
 
-        def get_state(self, node_id):
-            """Get hot water current state."""
-            node_index = -1
+                node_index = -1
 
-            state_return = "OFF"
-            state_tmp = "OFF"
-            state_found = False
-            mode_current = Pyhiveapi.Hotwater.get_mode(self, node_id)
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
 
-            current_node_attribute = "HotWater_State_" + node_id
+                if self.hive_api.session.session_id is not None:
+                    if len(self.hive_api.session.products.light) > 0:
+                        for cni in range(0, len(self.hive_api.session.products.light)):
+                            if "id" in self.hive_api.session.products.light[cni]:
+                                if self.hive_api.session.products.light[cni]["id"] == node_id:
+                                    node_index = cni
+                                    break
+                        if node_index != -1:
+                            json_string_content = \
+                                ('{"status": "ON", "brightness": '
+                                 + str(new_brightness)
+                                 + '}')
+                            hive_api_url = (self.hive_api.details.urls.nodes
+                                            + '/' + self.hive_api.session.products.light[node_index][
+                                                "type"]
+                                            + '/' + self.hive_api.session.products.light[node_index][
+                                                "id"])
+                            api_resp_d = self.hive_api.hive_api_json_call("POST",
+                                                                          hive_api_url,
+                                                                          json_string_content,
+                                                                          False)
 
-            if len(HSC.products.hotwater) > 0:
-                for current_node_index in range(0, len(HSC.products.hotwater)):
-                    if "id" in HSC.products.hotwater[current_node_index]:
-                        if HSC.products.hotwater[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
+                            api_resp = api_resp_d['original']
 
-                if node_index != -1:
-                    if ("state" in HSC.products.hotwater[node_index] and
-                            "status" in HSC.products.hotwater[node_index]["state"]):
-                        state_tmp = (HSC.products.hotwater[node_index]
-                                     ["state"]["status"])
-                        if state_tmp is None:
-                            state_tmp = "OFF"
-                        else:
-                            if mode_current == "SCHEDULE":
-                                if Pyhiveapi.Hotwater.get_boost(self, node_id) == "ON":
-                                    state_tmp = "ON"
-                                    state_found = True
+                        if str(api_resp) == "<Response [200]>":
+                            self.hive_api.hive_api_get_nodes(node_id)
+                            set_mode_success = True
+
+                return set_mode_success
+
+            def set_colour_temp(self, node_id, new_colour_temp):
+                """Set light to turn on."""
+                self.hive_api.check_hive_api_logon()
+
+                node_index = -1
+
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    if len(self.hive_api.session.products.light) > 0:
+                        for cni in range(0, len(self.hive_api.session.products.light)):
+                            if "id" in self.hive_api.session.products.light[cni]:
+                                if self.hive_api.session.products.light[cni]["id"] == node_id:
+                                    node_index = cni
+                                    break
+                        if node_index != -1:
+                            json_string_content = ('{"colourTemperature": '
+                                                   + str(new_colour_temp)
+                                                   + '}')
+                            hive_api_url = (self.hive_api.details.urls.nodes
+                                            + '/' + self.hive_api.session.products.light[node_index][
+                                                "type"]
+                                            + '/' + self.hive_api.session.products.light[node_index][
+                                                "id"])
+                            api_resp_d = self.hive_api.hive_api_json_call("POST",
+                                                                          hive_api_url,
+                                                                          json_string_content,
+                                                                          False)
+
+                            api_resp = api_resp_d['original']
+
+                        if str(api_resp) == "<Response [200]>":
+                            self.hive_api.hive_api_get_nodes(node_id)
+                            set_mode_success = True
+
+                return set_mode_success
+
+        class Sensor():
+            """Hive Sensors."""
+
+            def __init__(self, hive_api) -> None:
+                self.hive_api = hive_api
+                super().__init__()
+
+            def hub_online_status(self, node_id):
+                """Get the online status of the Hive hub."""
+                return_status = "Offline"
+
+                for a_hub in self.hive_api.session.devices.hub:
+                    if "id" in a_hub:
+                        if a_hub["id"] == node_id:
+                            if "props" in a_hub and "online" in a_hub["props"]:
+                                if a_hub["props"]["online"]:
+                                    return "Online"
                                 else:
-                                    if ("state" in
-                                            HSC.products.hotwater[node_index] and
-                                            "schedule" in
-                                            HSC.products.hotwater[node_index]
-                                            ["state"]):
-                                        snan = Pyhiveapi.p_get_schedule_now_next_later(self, HSC.products.hotwater[node_index]["state"]["schedule"])
-                                        if 'now' in snan:
-                                            if ('value' in snan["now"] and
-                                                    'status' in snan["now"]["value"]):
-                                                state_tmp = (snan["now"]["value"]
-                                                             ["status"])
-                                                state_found = True
-                            else:
-                                state_found = True
+                                    return "Offline"
 
-            if state_found:
-                NODE_ATTRIBS[current_node_attribute] = state_tmp
-                state_return = state_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    state_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    state_return = "UNKNOWN"
+                return return_status
 
-            return state_return
-
-
-        def get_schedule_now_next_later(self, node_id):
-            """Hive get hotwater schedule now, next and later."""
-            hotwater_mode_current = Pyhiveapi.Hotwater.get_mode(self, node_id)
-
-            snan = None
-
-            if hotwater_mode_current == "SCHEDULE":
+            def battery_level(self, node_id):
+                """Get device battery level."""
                 node_index = -1
 
-                if len(HSC.products.hotwater) > 0:
-                    for current_node_index in range(0, len(HSC.products.hotwater)):
-                        if "id" in HSC.products.hotwater[current_node_index]:
-                            if HSC.products.hotwater[current_node_index]["id"] == node_id:
+                battery_level_return = 0
+                battery_level_tmp = 0
+                battery_level_found = False
+                all_devices = self.hive_api.session.devices.thermostat + self.hive_api.session.devices.sensors
+
+                current_node_attribute = "BatteryLevel_" + node_id
+
+                if len(self.hive_api.session.devices.thermostat) > 0 or len(self.hive_api.session.devices.sensors) > 0:
+                    for current_node_index in range(0, len(all_devices)):
+                        if "id" in all_devices[current_node_index]:
+                            if all_devices[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
 
-                if node_index != -1:
-                    snan = Pyhiveapi.p_get_schedule_now_next_later(self, HSC.products.hotwater[node_index]["state"]["schedule"])
+                    if node_index != -1:
+                        if ("props" in all_devices[node_index] and "battery" in all_devices[node_index]["props"]):
+                            battery_level_tmp = (all_devices[node_index]["props"]["battery"])
+                            battery_level_found = True
+
+                if battery_level_found:
+                    NODE_ATTRIBS[current_node_attribute] = battery_level_tmp
+                    battery_level_return = battery_level_tmp
                 else:
-                    snan = None
-            else:
-                snan = None
+                    if current_node_attribute in NODE_ATTRIBS:
+                        battery_level_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        battery_level_return = 0
 
-            return snan
+                return battery_level_return
 
-
-        def set_mode(self, node_id, new_mode):
-            """Set hot water mode."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
+            def get_state(self, node_id, node_device_type):
+                """Get sensor state."""
                 node_index = -1
-                if len(HSC.products.hotwater) > 0:
-                    for current_node_index in range(0, len(HSC.products.hotwater)):
-                        if "id" in HSC.products.hotwater[current_node_index]:
-                            if (HSC.products.hotwater[current_node_index]["id"] == node_id):
+
+                sensor_state_tmp = False
+                sensor_state_return = False
+                sensor_found = False
+
+                current_node_attribute = "Sensor_State_" + node_id
+
+                if len(self.hive_api.session.products.sensors) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.sensors)):
+                        if "id" in self.hive_api.session.products.sensors[current_node_index]:
+                            if self.hive_api.session.products.sensors[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
 
                     if node_index != -1:
-                        if "id" in HSC.products.hotwater[node_index]:
-                            if new_mode == "SCHEDULE":
-                                json_string_content = '{"mode": "SCHEDULE"}'
-                            elif new_mode == "ON":
-                                json_string_content = '{"mode": "MANUAL"}'
-                            elif new_mode == "OFF":
-                                json_string_content = '{"mode": "OFF"}'
+                        if node_device_type == "contactsensor":
+                            state = (self.hive_api.session.products.sensors[node_index]["props"]["status"])
+                            if state == 'OPEN':
+                                sensor_state_tmp = True
+                        elif node_device_type == "motionsensor":
+                            sensor_state_tmp = (
+                                self.hive_api.session.products.sensors[node_index]["props"]["motion"]["status"])
+                    if sensor_state_tmp != None:
+                        sensor_found = True
 
-                            if (new_mode == "SCHEDULE" or new_mode == "ON" or new_mode == "OFF"):
-                                hive_api_url = (HIVE_API.urls.nodes + "/hotwater/" + HSC.products.hotwater[node_index]["id"])
-                                api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST", hive_api_url, json_string_content, False)
-
-                                api_resp = api_resp_d['original']
-
-                                if str(api_resp) == "<Response [200]>":
-                                    Pyhiveapi.hive_api_get_nodes(self, node_id)
-#                                    fire_bus_event(node_id, device_type)
-                                    set_mode_success = True
-
-            return set_mode_success
-
-    class Light():
-        """Hive Lights."""
-        def get_state(self, node_id):
-            """Get light current state."""
-            node_index = -1
-
-            light_state_return = "UNKNOWN"
-            light_state_tmp = "UNKNOWN"
-            light_state_found = False
-
-            current_node_attribute = "Light_State_" + node_id
-
-            if len(HSC.products.light) > 0:
-                for current_node_index in range(0, len(HSC.products.light)):
-                    if "id" in HSC.products.light[current_node_index]:
-                        if HSC.products.light[current_node_index][
-                            "id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.light[
-                        node_index] and "status" in
-                        HSC.products.light[node_index]["state"]):
-                        light_state_tmp = (HSC.products.light[node_index]
-                                           ["state"]["status"])
-                        light_state_found = True
-
-            if light_state_found:
-                NODE_ATTRIBS[current_node_attribute] = light_state_tmp
-                light_state_return = light_state_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    light_state_return = NODE_ATTRIBS.get(
-                        current_node_attribute)
+                if sensor_found:
+                    NODE_ATTRIBS[current_node_attribute] = sensor_state_tmp
+                    sensor_state_return = sensor_state_tmp
                 else:
-                    light_state_return = "UNKNOWN"
+                    if current_node_attribute in NODE_ATTRIBS:
+                        sensor_state_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        sensor_state_return = False
 
-            light_state_return_b = False
+                return sensor_state_return
 
-            if light_state_return == "ON":
-                light_state_return_b = True
+            def get_mode(self, node_id):
+                """Get sensor mode."""
 
-            return light_state_return_b
+                node_index = -1
 
-        def get_brightness(self, node_id):
-            """Get light current brightness."""
-            node_index = -1
+                hive_device_mode_tmp = ""
+                hive_device_mode_return = ""
+                hive_device_mode_found = False
+                all_devices = self.hive_api.session.products.light + self.hive_api.session.products.plug
 
-            tmp_brightness_return = 0
-            light_brightness_return = 0
-            light_brightness_tmp = 0
-            light_brightness_found = False
+                current_node_attribute = "Device_Mode_" + node_id
 
-            current_node_attribute = "Light_Brightness_" + node_id
-
-            if len(HSC.products.light) > 0:
-                for current_node_index in range(0, len(HSC.products.light)):
-                    if "id" in HSC.products.light[current_node_index]:
-                        if HSC.products.light[current_node_index][
-                            "id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.light[
-                        node_index] and "brightness" in
-                        HSC.products.light[node_index]["state"]):
-                        light_brightness_tmp = (HSC.products.light[node_index]
-                                                ["state"]["brightness"])
-                        light_brightness_found = True
-
-            if light_brightness_found:
-                NODE_ATTRIBS[current_node_attribute] = light_brightness_tmp
-                tmp_brightness_return = light_brightness_tmp
-                light_brightness_return = ((tmp_brightness_return / 100) * 255)
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    tmp_brightness_return = NODE_ATTRIBS.get(
-                        current_node_attribute)
-                    light_brightness_return = (
-                    (tmp_brightness_return / 100) * 255)
-                else:
-                    light_brightness_return = 0
-
-            return light_brightness_return
-
-        def get_min_colour_temp(self, node_id):
-            """Get light minimum colour temperature."""
-            node_index = -1
-
-            light_min_color_temp_tmp = 0
-            light_min_color_temp_return = 0
-            light_min_color_temp_found = False
-
-            node_attrib = "Light_Min_Color_Temp_" + node_id
-
-            if len(HSC.products.light) > 0:
-                for current_node_index in range(0, len(HSC.products.light)):
-                    if "id" in HSC.products.light[current_node_index]:
-                        if HSC.products.light[current_node_index][
-                            "id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("props" in HSC.products.light[node_index] and
-                                "colourTemperature" in
-                                HSC.products.light[node_index][
-                                    "props"] and "max" in
-                        HSC.products.light[node_index]
-                        ["props"]["colourTemperature"]):
-                        light_min_color_temp_tmp = (
-                        HSC.products.light[node_index]
-                        ["props"]
-                        ["colourTemperature"]["max"])
-                        light_min_color_temp_found = True
-
-            if light_min_color_temp_found:
-                NODE_ATTRIBS[node_attrib] = light_min_color_temp_tmp
-                light_min_color_temp_return = round(
-                    (1 / light_min_color_temp_tmp)
-                    * 1000000)
-            else:
-                if node_attrib in NODE_ATTRIBS:
-                    light_min_color_temp_return = (
-                    NODE_ATTRIBS.get(node_attrib))
-                else:
-                    light_min_color_temp_return = 0
-
-            return light_min_color_temp_return
-
-        def get_max_colour_temp(self, node_id):
-            """Get light maximum colour temperature."""
-            node_index = -1
-
-            light_max_color_temp_tmp = 0
-            light_max_color_temp_return = 0
-            light_max_color_temp_found = False
-
-            node_attrib = "Light_Max_Color_Temp_" + node_id
-
-            if len(HSC.products.light) > 0:
-                for current_node_index in range(0, len(HSC.products.light)):
-                    if "id" in HSC.products.light[current_node_index]:
-                        if HSC.products.light[current_node_index][
-                            "id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("props" in HSC.products.light[node_index] and
-                                "colourTemperature" in
-                                HSC.products.light[node_index]["props"] and
-                                "min" in
-                                HSC.products.light[node_index]["props"]
-                                ["colourTemperature"]):
-                        light_max_color_temp_tmp = (
-                        HSC.products.light[node_index]
-                        ["props"]["colourTemperature"]
-                        ["min"])
-                        light_max_color_temp_found = True
-
-            if light_max_color_temp_found:
-                NODE_ATTRIBS[node_attrib] = light_max_color_temp_tmp
-                light_max_color_temp_return = round(
-                    (1 / light_max_color_temp_tmp)
-                    * 1000000)
-            else:
-                if node_attrib in NODE_ATTRIBS:
-                    light_max_color_temp_return = NODE_ATTRIBS.get(node_attrib)
-                else:
-                    light_max_color_temp_return = 0
-
-            return light_max_color_temp_return
-
-        def get_color_temp(self, node_id    ):
-            """Get light current colour temperature."""
-            node_index = -1
-
-            light_color_temp_tmp = 0
-            light_color_temp_return = 0
-            light_color_temp_found = False
-
-            current_node_attribute = "Light_Color_Temp_" + node_id
-
-            if len(HSC.products.light) > 0:
-                for current_node_index in range(0, len(HSC.products.light)):
-                    if "id" in HSC.products.light[current_node_index]:
-                        if HSC.products.light[current_node_index][
-                            "id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.light[node_index] and
-                                "colourTemperature" in
-                                HSC.products.light[node_index]["state"]):
-                        light_color_temp_tmp = (HSC.products.light[node_index]
-                                                ["state"]["colourTemperature"])
-                        light_color_temp_found = True
-
-            if light_color_temp_found:
-                NODE_ATTRIBS[current_node_attribute] = light_color_temp_tmp
-                light_color_temp_return = round(
-                    (1 / light_color_temp_tmp) * 1000000)
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    light_color_temp_return = NODE_ATTRIBS.get(
-                        current_node_attribute)
-                else:
-                    light_color_temp_return = 0
-
-            return light_color_temp_return
-
-        def turn_off(self, node_id):
-            """Set light to turn off."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            node_index = -1
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
-                if len(HSC.products.light) > 0:
-                    for current_node_index in range(0,
-                                                    len(HSC.products.light)):
-                        if "id" in HSC.products.light[current_node_index]:
-                            if (HSC.products.light[current_node_index]
-                                ["id"] == node_id):
+                if len(self.hive_api.session.products.light) > 0 or len(self.hive_api.session.products.plug) > 0:
+                    for current_node_index in range(0, len(all_devices)):
+                        if "id" in all_devices[current_node_index]:
+                            if all_devices[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
+
                     if node_index != -1:
-                        json_string_content = '{"status": "OFF"}'
-                        hive_api_url = (HIVE_API.urls.nodes
-                                        + '/'
-                                        + HSC.products.light[node_index]["type"]
-                                        + '/'
-                                        + HSC.products.light[node_index]["id"])
-                        api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST",
-                                                        hive_api_url,
-                                                        json_string_content,
-                                                        False)
+                        if ("state" in all_devices[node_index] and
+                                    "mode" in all_devices[node_index]["state"]):
+                            hive_device_mode_tmp = (all_devices[node_index]
+                                                    ["state"]["mode"])
+                            hive_device_mode_found = True
 
-                        api_resp = api_resp_d['original']
-
-                        if str(api_resp) == "<Response [200]>":
-                            Pyhiveapi.hive_api_get_nodes(self, node_id)
-                            set_mode_success = True
-
-            return set_mode_success
-
-        def turn_on(self, node_id):
-            """Set light to turn on."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            node_index = -1
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
-                if len(HSC.products.light) > 0:
-                    for cni in range(0, len(HSC.products.light)):
-                        if "id" in HSC.products.light[cni]:
-                            if HSC.products.light[cni]["id"] == node_id:
-                                node_index = cni
-                                break
-                    if node_index != -1:
-                        json_string_content = '{"status": "ON"}'
-                        hive_api_url = (HIVE_API.urls.nodes
-                                        + '/' + HSC.products.light[node_index][
-                                            "type"]
-                                        + '/' + HSC.products.light[node_index][
-                                            "id"])
-                        api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST",
-                                                        hive_api_url,
-                                                        json_string_content,
-                                                        False)
-
-                        api_resp = api_resp_d['original']
-
-                    if str(api_resp) == "<Response [200]>":
-                        Pyhiveapi.hive_api_get_nodes(self, node_id)
-                        set_mode_success = True
-
-            return set_mode_success
-
-        def set_brightness(self, node_id, new_brightness):
-            """Set light to turn on."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            node_index = -1
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
-                if len(HSC.products.light) > 0:
-                    for cni in range(0, len(HSC.products.light)):
-                        if "id" in HSC.products.light[cni]:
-                            if HSC.products.light[cni]["id"] == node_id:
-                                node_index = cni
-                                break
-                    if node_index != -1:
-                        json_string_content = \
-                            ('{"status": "ON", "brightness": '
-                            + str(new_brightness)
-                            + '}')
-                        hive_api_url = (HIVE_API.urls.nodes
-                                        + '/' + HSC.products.light[node_index][
-                                            "type"]
-                                        + '/' + HSC.products.light[node_index][
-                                            "id"])
-                        api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST",
-                                                        hive_api_url,
-                                                        json_string_content,
-                                                        False)
-
-                        api_resp = api_resp_d['original']
-
-                    if str(api_resp) == "<Response [200]>":
-                        Pyhiveapi.hive_api_get_nodes(self, node_id)
-                        set_mode_success = True
-
-            return set_mode_success
-
-        def set_colour_temp(self, node_id, new_colour_temp):
-            """Set light to turn on."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            node_index = -1
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
-                if len(HSC.products.light) > 0:
-                    for cni in range(0, len(HSC.products.light)):
-                        if "id" in HSC.products.light[cni]:
-                            if HSC.products.light[cni]["id"] == node_id:
-                                node_index = cni
-                                break
-                    if node_index != -1:
-                        json_string_content = ('{"colourTemperature": '
-                                                + str(new_colour_temp)
-                                                + '}')
-                        hive_api_url = (HIVE_API.urls.nodes
-                                        + '/' + HSC.products.light[node_index][
-                                            "type"]
-                                        + '/' + HSC.products.light[node_index][
-                                            "id"])
-                        api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST",
-                                                        hive_api_url,
-                                                        json_string_content,
-                                                        False)
-
-                        api_resp = api_resp_d['original']
-
-                    if str(api_resp) == "<Response [200]>":
-                        Pyhiveapi.hive_api_get_nodes(self, node_id)
-                        set_mode_success = True
-
-            return set_mode_success
-
-    class Sensor():
-        """Hive Sensors."""
-        def hub_online_status(self, node_id):
-            """Get the online status of the Hive hub."""
-            return_status = "Offline"
-
-            for a_hub in HSC.devices.hub:
-                if "id" in a_hub:
-                    if a_hub["id"] == node_id:
-                        if "props" in a_hub and "online" in a_hub["props"]:
-                            if a_hub["props"]["online"]:
-                                return "Online"
-                            else:
-                                return "Offline"
-
-            return return_status
-
-
-        def battery_level(self, node_id):
-            """Get device battery level."""
-            node_index = -1
-
-            battery_level_return = 0
-            battery_level_tmp = 0
-            battery_level_found = False
-            all_devices = HSC.devices.thermostat + HSC.devices.sensors
-
-            current_node_attribute = "BatteryLevel_" + node_id
-
-            if len(HSC.devices.thermostat) > 0 or len(HSC.devices.sensors) > 0:
-                for current_node_index in range(0, len(all_devices)):
-                    if "id" in all_devices[current_node_index]:
-                        if all_devices[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("props" in all_devices[node_index] and "battery" in all_devices[node_index]["props"]):
-                        battery_level_tmp = (all_devices[node_index]["props"]["battery"])
-                        battery_level_found = True
-
-            if battery_level_found:
-                NODE_ATTRIBS[current_node_attribute] = battery_level_tmp
-                battery_level_return = battery_level_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    battery_level_return = NODE_ATTRIBS.get(current_node_attribute)
+                if hive_device_mode_found:
+                    NODE_ATTRIBS[current_node_attribute] = hive_device_mode_tmp
+                    hive_device_mode_return = hive_device_mode_tmp
                 else:
-                    battery_level_return = 0
+                    if current_node_attribute in NODE_ATTRIBS:
+                        hive_device_mode_return = NODE_ATTRIBS.get(current_node_attribute)
+                    else:
+                        hive_device_mode_return = "UNKNOWN"
 
-            return battery_level_return
+                return hive_device_mode_return
 
-        def get_state(self, node_id, node_device_type):
-            """Get sensor state."""
-            node_index = -1
+        class Switch():
+            """Hive Switches."""
 
-            sensor_state_tmp = False
-            sensor_state_return = False
-            sensor_found = False
+            def __init__(self, hive_api) -> None:
+                self.hive_api = hive_api
+                super().__init__()
 
-            current_node_attribute = "Sensor_State_" + node_id
+            def get_state(self, node_id):
+                """Get smart plug current state."""
+                node_index = -1
 
-            if len(HSC.products.sensors) > 0:
-                for current_node_index in range(0, len(HSC.products.sensors)):
-                    if "id" in HSC.products.sensors[current_node_index]:
-                        if HSC.products.sensors[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
+                smartplug_state_tmp = "UNKNOWN"
+                smartplug_state_return = "UNKNOWN"
+                smartplug_state_found = False
 
-                if node_index != -1:
-                    if node_device_type == "contactsensor":
-                        state = (HSC.products.sensors[node_index]["props"]["status"])
-                        if state == 'OPEN':
-                            sensor_state_tmp = True
-                    elif node_device_type == "motionsensor":
-                        sensor_state_tmp = (HSC.products.sensors[node_index]["props"]["motion"]["status"])
-                if sensor_state_tmp != None:
-                    sensor_found = True
+                current_node_attribute = "Smartplug_State_" + node_id
 
-            if sensor_found:
-                NODE_ATTRIBS[current_node_attribute] = sensor_state_tmp
-                sensor_state_return = sensor_state_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    sensor_state_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    sensor_state_return = False
-
-            return sensor_state_return
-
-        def get_mode(self, node_id):
-            """Get sensor mode."""
-
-            node_index = -1
-
-            hive_device_mode_tmp = ""
-            hive_device_mode_return = ""
-            hive_device_mode_found = False
-            all_devices = HSC.products.light + HSC.products.plug
-
-            current_node_attribute = "Device_Mode_" + node_id
-
-            if len(HSC.products.light) > 0 or len(HSC.products.plug) > 0:
-                for current_node_index in range(0, len(all_devices)):
-                    if "id" in all_devices[current_node_index]:
-                        if all_devices[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in all_devices[node_index] and
-                            "mode" in all_devices[node_index]["state"]):
-                        hive_device_mode_tmp = (all_devices[node_index]
-                                                ["state"]["mode"])
-                        hive_device_mode_found = True
-
-            if hive_device_mode_found:
-                NODE_ATTRIBS[current_node_attribute] = hive_device_mode_tmp
-                hive_device_mode_return = hive_device_mode_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    hive_device_mode_return = NODE_ATTRIBS.get(current_node_attribute)
-                else:
-                    hive_device_mode_return = "UNKNOWN"
-
-            return hive_device_mode_return
-
-    class Switch():
-        """Hive Switches."""
-        def get_state(self, node_id):
-            """Get smart plug current state."""
-            node_index = -1
-
-            smartplug_state_tmp = "UNKNOWN"
-            smartplug_state_return = "UNKNOWN"
-            smartplug_state_found = False
-
-            current_node_attribute = "Smartplug_State_" + node_id
-
-            if len(HSC.products.plug) > 0:
-                for current_node_index in range(0, len(HSC.products.plug)):
-                    if "id" in HSC.products.plug[current_node_index]:
-                        if HSC.products.plug[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("state" in HSC.products.plug[
-                        node_index] and "status" in
-                        HSC.products.plug[node_index]["state"]):
-                        smartplug_state_tmp = (HSC.products.plug[node_index]
-                                               ["state"]["status"])
-                        smartplug_state_found = True
-
-            if smartplug_state_found:
-                NODE_ATTRIBS[current_node_attribute] = smartplug_state_tmp
-                smartplug_state_return = smartplug_state_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    smartplug_state_return = NODE_ATTRIBS.get(
-                        current_node_attribute)
-                else:
-                    smartplug_state_return = "UNKNOWN"
-
-            smartplug_state_return_b = False
-
-            if smartplug_state_return == "ON":
-                smartplug_state_return_b = True
-
-            return smartplug_state_return_b
-
-        def get_power_usage(self, node_id):
-            """Get smart plug current power usage."""
-            node_index = -1
-
-            current_power_tmp = 0
-            current_power_return = 0
-            current_power_found = False
-
-            current_node_attribute = "Smartplug_Current_Power_" + node_id
-
-            if len(HSC.products.plug) > 0:
-                for current_node_index in range(0, len(HSC.products.plug)):
-                    if "id" in HSC.products.plug[current_node_index]:
-                        if HSC.products.plug[current_node_index]["id"] == node_id:
-                            node_index = current_node_index
-                            break
-
-                if node_index != -1:
-                    if ("props" in HSC.products.plug[node_index]
-                        and "powerConsumption"
-                        in HSC.products.plug[node_index]["props"]):
-                        current_power_tmp = (HSC.products.plug[node_index]
-                                             ["props"]["powerConsumption"])
-                        current_power_found = True
-
-            if current_power_found:
-                NODE_ATTRIBS[current_node_attribute] = current_power_tmp
-                current_power_return = current_power_tmp
-            else:
-                if current_node_attribute in NODE_ATTRIBS:
-                    current_power_return = NODE_ATTRIBS.get(
-                        current_node_attribute)
-                else:
-                    current_power_return = 0
-
-            return current_power_return
-
-        def turn_on(self, node_id):
-            """Set smart plug to turn on."""
-            Pyhiveapi.check_hive_api_logon(self)
-
-            node_index = -1
-
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
-
-            if HSC.session_id is not None:
-                if len(HSC.products.plug) > 0:
-                    for current_node_index in range(0, len(HSC.products.plug)):
-                        if "id" in HSC.products.plug[current_node_index]:
-                            if HSC.products.plug[current_node_index][
-                                "id"] == node_id:
+                if len(self.hive_api.session.products.plug) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.plug)):
+                        if "id" in self.hive_api.session.products.plug[current_node_index]:
+                            if self.hive_api.session.products.plug[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
+
                     if node_index != -1:
-                        json_string_content = '{"status": "ON"}'
-                        hive_api_url = (HIVE_API.urls.nodes
-                                        + '/'
-                                        + HSC.products.plug[node_index]["type"]
-                                        + '/'
-                                        + HSC.products.plug[node_index]["id"])
-                        api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST",
-                                                        hive_api_url,
-                                                        json_string_content,
-                                                        False)
+                        if ("state" in self.hive_api.session.products.plug[
+                            node_index] and "status" in
+                            self.hive_api.session.products.plug[node_index]["state"]):
+                            smartplug_state_tmp = (self.hive_api.session.products.plug[node_index]
+                                                   ["state"]["status"])
+                            smartplug_state_found = True
 
-                        api_resp = api_resp_d['original']
+                if smartplug_state_found:
+                    NODE_ATTRIBS[current_node_attribute] = smartplug_state_tmp
+                    smartplug_state_return = smartplug_state_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        smartplug_state_return = NODE_ATTRIBS.get(
+                            current_node_attribute)
+                    else:
+                        smartplug_state_return = "UNKNOWN"
 
-                        if str(api_resp) == "<Response [200]>":
-                            Pyhiveapi.hive_api_get_nodes(self, node_id)
-                            set_mode_success = True
+                smartplug_state_return_b = False
 
-            return set_mode_success
+                if smartplug_state_return == "ON":
+                    smartplug_state_return_b = True
 
-        def turn_off(self, node_id, ):
-            """Set smart plug to turn off."""
-            Pyhiveapi.check_hive_api_logon(self)
+                return smartplug_state_return_b
 
-            node_index = -1
+            def get_power_usage(self, node_id):
+                """Get smart plug current power usage."""
+                node_index = -1
 
-            set_mode_success = False
-            api_resp_d = {}
-            api_resp = ""
+                current_power_tmp = 0
+                current_power_return = 0
+                current_power_found = False
 
-            if HSC.session_id is not None:
-                if len(HSC.products.plug) > 0:
-                    for current_node_index in range(0, len(HSC.products.plug)):
-                        if "id" in HSC.products.plug[current_node_index]:
-                            if HSC.products.plug[current_node_index][
-                                "id"] == node_id:
+                current_node_attribute = "Smartplug_Current_Power_" + node_id
+
+                if len(self.hive_api.session.products.plug) > 0:
+                    for current_node_index in range(0, len(self.hive_api.session.products.plug)):
+                        if "id" in self.hive_api.session.products.plug[current_node_index]:
+                            if self.hive_api.session.products.plug[current_node_index]["id"] == node_id:
                                 node_index = current_node_index
                                 break
+
                     if node_index != -1:
-                        json_string_content = '{"status": "OFF"}'
-                        hive_api_url = (HIVE_API.urls.nodes
-                                        + '/'
-                                        + HSC.products.plug[node_index]["type"]
-                                        + '/'
-                                        + HSC.products.plug[node_index]["id"])
-                        api_resp_d = Pyhiveapi.hive_api_json_call(self, "POST",
-                                                        hive_api_url,
-                                                        json_string_content,
-                                                        False)
+                        if ("props" in self.hive_api.session.products.plug[node_index]
+                            and "powerConsumption"
+                            in self.hive_api.session.products.plug[node_index]["props"]):
+                            current_power_tmp = (self.hive_api.session.products.plug[node_index]
+                                                 ["props"]["powerConsumption"])
+                            current_power_found = True
 
-                        api_resp = api_resp_d['original']
+                if current_power_found:
+                    NODE_ATTRIBS[current_node_attribute] = current_power_tmp
+                    current_power_return = current_power_tmp
+                else:
+                    if current_node_attribute in NODE_ATTRIBS:
+                        current_power_return = NODE_ATTRIBS.get(
+                            current_node_attribute)
+                    else:
+                        current_power_return = 0
 
-                        if str(api_resp) == "<Response [200]>":
-                            Pyhiveapi.hive_api_get_nodes(self, node_id)
-                            set_mode_success = True
+                return current_power_return
 
-            return set_mode_success
+            def turn_on(self, node_id):
+                """Set smart plug to turn on."""
+                self.hive_api.check_hive_api_logon()
 
+                node_index = -1
 
-    class Weather():
-        """Hive Weather."""
-        def temperature(self):
-            """Get Hive Weather temperature."""
-            return HSC.weather.temperature.value
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    if len(self.hive_api.session.products.plug) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.plug)):
+                            if "id" in self.hive_api.session.products.plug[current_node_index]:
+                                if self.hive_api.session.products.plug[current_node_index][
+                                    "id"] == node_id:
+                                    node_index = current_node_index
+                                    break
+                        if node_index != -1:
+                            json_string_content = '{"status": "ON"}'
+                            hive_api_url = (self.hive_api.details.urls.nodes
+                                            + '/'
+                                            + self.hive_api.session.products.plug[node_index]["type"]
+                                            + '/'
+                                            + self.hive_api.session.products.plug[node_index]["id"])
+                            api_resp_d = self.hive_api.hive_api_json_call("POST",
+                                                                          hive_api_url,
+                                                                          json_string_content,
+                                                                          False)
+
+                            api_resp = api_resp_d['original']
+
+                            if str(api_resp) == "<Response [200]>":
+                                self.hive_api.hive_api_get_nodes(node_id)
+                                set_mode_success = True
+
+                return set_mode_success
+
+            def turn_off(self, node_id, ):
+                """Set smart plug to turn off."""
+                self.hive_api.check_hive_api_logon()
+
+                node_index = -1
+
+                set_mode_success = False
+                api_resp_d = {}
+                api_resp = ""
+
+                if self.hive_api.session.session_id is not None:
+                    if len(self.hive_api.session.products.plug) > 0:
+                        for current_node_index in range(0, len(self.hive_api.session.products.plug)):
+                            if "id" in self.hive_api.session.products.plug[current_node_index]:
+                                if self.hive_api.session.products.plug[current_node_index][
+                                    "id"] == node_id:
+                                    node_index = current_node_index
+                                    break
+                        if node_index != -1:
+                            json_string_content = '{"status": "OFF"}'
+                            hive_api_url = (self.hive_api.details.urls.nodes
+                                            + '/'
+                                            + self.hive_api.session.products.plug[node_index]["type"]
+                                            + '/'
+                                            + self.hive_api.session.products.plug[node_index]["id"])
+                            api_resp_d = self.hive_api.hive_api_json_call("POST",
+                                                                          hive_api_url,
+                                                                          json_string_content,
+                                                                          False)
+
+                            api_resp = api_resp_d['original']
+
+                            if str(api_resp) == "<Response [200]>":
+                                self.hive_api.hive_api_get_nodes(node_id)
+                                set_mode_success = True
+
+                return set_mode_success
+
+        class Weather():
+            """Hive Weather."""
+
+            def __init__(self, hive_api) -> None:
+                self.hive_api = hive_api
+                super().__init__()
+
+            def temperature(self):
+                """Get Hive Weather temperature."""
+                return self.hive_api.session.weather.temperature.value
+
+        if device == Pyhiveapi.Device.Heating:
+            return Heating(self.hive_api)
+        elif device == Pyhiveapi.Device.Hotwater:
+            return Hotwater(self.hive_api)
+        elif device == Pyhiveapi.Device.Light:
+            return Light(self.hive_api)
+        elif device == Pyhiveapi.Device.Sensor:
+            return Sensor(self.hive_api)
+        elif device == Pyhiveapi.Device.Switch:
+            return Switch(self.hive_api)
+        elif device == Pyhiveapi.Device.Weather:
+            return Weather(self.hive_api)
